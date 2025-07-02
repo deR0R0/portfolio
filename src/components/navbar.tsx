@@ -15,39 +15,16 @@ gsap.registerPlugin(ScrollTrigger);
 gsap.registerPlugin(SplitText);
 gsap.registerPlugin(MorphSVGPlugin);
 
-export default function Navbar({className}: {className?: string}) {
+export default function Navbar({ mobile, className}: { mobile?: boolean, className?: string}) {
     const lenis = useLenis();
     const [navOpen, setNavOpen] = useState(false);
-    const navOpenRef = useRef(navOpen);
 
     const tl = useRef(gsap.timeline({ paused: true }));
-
-    // navigation remove scrolling
-    useEffect(() => {
-        navOpenRef.current = navOpen;
-
-        /*
-        if(navOpen) {
-            document.body.style.overflow = "hidden";
-            setTimeout(() => {
-                document.getElementsByClassName("home-button")[0].classList.remove("overflow-clip");
-                document.getElementsByClassName("about-button")[0].classList.remove("overflow-clip");
-                document.getElementsByClassName("projects-button")[0].classList.remove("overflow-clip");
-                document.getElementsByClassName("contact-button")[0].classList.remove("overflow-clip");
-            }, 1550)
-        } else {
-            document.body.style.overflow = "auto";
-            document.getElementsByClassName("home-button")[0].classList.add("overflow-clip");
-            document.getElementsByClassName("about-button")[0].classList.add("overflow-clip");
-            document.getElementsByClassName("projects-button")[0].classList.add("overflow-clip");
-            document.getElementsByClassName("contact-button")[0].classList.add("overflow-clip");
-        }*/
-    }, [navOpen]);
 
 
     const handleNavigationAnimations = (opening: boolean) => {
         if (opening) {
-            tl.current.play(0); // Play from the beginning
+            tl.current.play(0); // play the timeline
         } else {
             tl.current.reverse();
         }
@@ -61,6 +38,7 @@ export default function Navbar({className}: {className?: string}) {
         const aboutSplit = new SplitText(".about-button", { type: "chars" });
         const projectsSplit = new SplitText(".projects-button", { type: "chars" });
         const contactSplit = new SplitText(".contact-button", { type: "chars" });
+        const copyrightSplit = new SplitText(".copyright-notice", { type: "words" });
 
         tl.current.clear();
 
@@ -109,9 +87,22 @@ export default function Navbar({className}: {className?: string}) {
             opacity: 1,
             stagger: 0.05,
             ease: "sine.out",
-        }, "<+=0.1");
+        }, "<+=0.1")
+        .fromTo(copyrightSplit.words, {
+            y: 50,
+        }, {
+            duration: 0.4,
+            y: 0,
+            opacity: 1,
+            stagger: 0.05,
+            ease: "sine.out",
+        }, "<+=0.1"
+        );
 
-        // close the nav bar when the user loads onto the page
+        // stop the events below if on mobile, we want the universal nav bar to be visible at all times
+        if(mobile) return;
+
+        // hide the button to open the universal nav bar when on load.
         gsap.fromTo(".opener", { scale: 1 }, { scale: 0, duration: 0.01})
 
         // show the button when user scroll past the top of the page
@@ -128,12 +119,10 @@ export default function Navbar({className}: {className?: string}) {
     })
 
     const toggleUniversalNav = () => {
-        var offsetAmount = "80vh"
-        if(window.innerWidth < 640) {
-            offsetAmount = "100vh"
-        }
+        var offsetAmount = "42rem"
+        
         if (navOpen) {
-            gsap.to(".universal-nav", { y: "0vh", duration: 1.25, ease: "power3.inOut" });
+            gsap.to(".universal-nav", { y: "0rem", duration: 1.25, ease: "power3.inOut" });
             setNavOpen(false);
             lenis?.start();
             handleNavigationAnimations(false);
@@ -181,7 +170,7 @@ export default function Navbar({className}: {className?: string}) {
                 </button>
             </MagneticClickable>
             {/* Universal Navigation */}
-            <div className="universal-nav fixed -top-[42rem] left-0 w-full h-[40rem] bg-zinc-800 text-5xl text-white flex flex-col z-40">
+            <div className="universal-nav fixed -top-[42rem] left-0 w-full h-[42rem] bg-zinc-800 text-5xl text-white flex flex-col z-40">
                 <div className="navigation-title flex flex-rol w-fit mt-16 ml-10 overflow-clip">
                     <span className="text-sm text-zinc-500">NAVIGATION</span>
                 </div>
@@ -230,9 +219,12 @@ export default function Navbar({className}: {className?: string}) {
                         href="/contact"
                     >Contact</Link>
                 </div>
+                <div className="copyright-notice flex flex-rol w-fit mt-16 ml-10 overflow-clip">
+                    <span className="text-sm text-zinc-500">© MIT License Robert Zhao</span>
+                </div>
             </div>
-
-            <nav className={`top-bar-nav w-full h-16 flex flex-row text-xl bg-transparent text-gray-800`}>
+            {/* Navigation Bar */}
+            <nav className={`top-bar-nav w-full h-16 md:flex flex-row text-xl bg-transparent text-gray-800 hidden`}>
                 <Link 
                     className={`my-auto ml-10`}
                     href="/"
@@ -257,8 +249,8 @@ export default function Navbar({className}: {className?: string}) {
                         >Contact</Link>
                     </MagneticClickable>
                 </div>
-            </nav>
-
+            </nav>            
+            
         </div>
     );
 }
