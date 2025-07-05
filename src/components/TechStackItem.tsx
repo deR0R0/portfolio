@@ -56,7 +56,7 @@ export default function TechStackItem({ experience, language, link, path, viewBo
 
     return (
         <div 
-            className={`tech-stack-item tech-stack-item-${language} relative`}
+            className={`tech-stack-item tech-stack-item-${language} relative min-h-[28px]`}
             onMouseEnter={(e) => showToolTip(e.currentTarget)}
             onMouseLeave={hideAllToolTips}
         >

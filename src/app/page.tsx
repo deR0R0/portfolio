@@ -11,6 +11,7 @@ import { figtree, inter, pjs } from "./fonts";
 import Link from "next/link";
 import ScrollingHobbyList from "@/components/ScrollingHobbyList";
 import TechStackItem from "@/components/TechStackItem";
+import ProjectItem from "@/components/ProjectItem";
 
 gsap.registerPlugin(DrawSVGPlugin);
 gsap.registerPlugin(ScrollTrigger);
@@ -38,7 +39,7 @@ export default function Home() {
       document.getElementsByClassName("idk-what-to-name-this")[0]?.classList.add("opacity-0");
       setTimeout(() => {
         setLoaded(true);
-        //tl.current.timeScale(100);
+        tl.current.timeScale(100);
         tl.current.play();
       }, 1)
     };
@@ -66,7 +67,7 @@ export default function Home() {
   useGSAP(() => {
     if(!loaded) return;
 
-    // insert code here
+    // what i do section text fade in on scroll effect
     const element = document.querySelector(".what-i-do-text");
     const split = new SplitText(element, { type: "chars" });
 
@@ -86,6 +87,7 @@ export default function Home() {
         );
       });
     } else {
+      // adjust for mobile devices
       split.chars.forEach((char, i) => {
         gsap.fromTo(char, 
           { opacity: 0.25 },
@@ -101,6 +103,25 @@ export default function Home() {
         );
       });
     }
+
+
+    // create the element fade in on scroll effects
+    const fadeInElements = document.querySelectorAll(".fade-in-on-scroll");
+    fadeInElements.forEach((el) => {
+      gsap.fromTo(el, 
+        { opacity: 0 },
+        {
+          opacity: 1,
+          scrollTrigger: {
+            trigger: el,
+            start: "clamp(top-=100px center)",
+            end: "clamp(bottom center)",
+            scrub: false,
+            markers: true
+          }
+        }
+      );
+    });
     
   }, [loaded]);
 
@@ -204,6 +225,8 @@ export default function Home() {
       { y: -50, opacity: 0 },
       { y: 0, opacity: 1, duration: 1, ease: "power3.inOut" },
     )
+
+    // fade in the content for people with giant screens
     tl.current.fromTo(
       ".scrolling-hobby-list",
       { opacity: 0 },
@@ -213,7 +236,8 @@ export default function Home() {
       ".what-i-do-wrapper",
       { opacity: 0 },
       { opacity: 1, duration: 1, ease: "power3.inOut" },
-    )
+    );
+
     tl.current.call(() => {ScrollTrigger.refresh();}, [], "<");
   }, [loaded]);
 
@@ -259,14 +283,13 @@ export default function Home() {
       
       { /* What I Do */ }
       <div className="what-i-do-wrapper flex flex-col mt-20 mx-auto">
-        <span className="text-zinc-400 text-md tracking-wider border-b-2 border-zinc-300 pb-5 md:w-lg w-72">WHAT I DO</span>
         <div className={`flex flex-col md:text-7xl text-4xl md:w-5xl w-[23.5rem] leading-loose whitespace-break-spaces ${pjs.className}`}>
-          <span className="what-i-do-text">"I build simple open-sourced applications that make every-day life tasks easier."</span>
+          <span className="what-i-do-text">I build simple open-sourced  applications that make every- day life tasks easier.</span>
         </div>
       </div>
 
       { /* Tech Stack / Technologies I work with */ }
-      <div className="my-tech-stack-wrapper relative flex flex-col mt-20 mx-auto overflow-x-clip">
+      <div className="tech-stack-wrapper relative flex flex-col mt-20 mx-auto overflow-x-clip fade-in-on-scroll">
         <span className="text-zinc-400 text-md tracking-wider border-b-2 border-zinc-300 pb-5 md:w-lg w-72">MY TECH STACK</span>
         <motion.div
           className="scrolling-tech-stack-list flex flex-row relative mt-9 space-x-16 md:w-5xl w-[23.5rem]"
@@ -274,6 +297,7 @@ export default function Home() {
           initial={{ x: 0 }}
           transition={{ duration: 15, ease: "linear", repeat: Infinity }}
         >
+          { /* yes i can use a for loop for this, and yes i am too lazy to create a for loop */}
           <TechStackItem experience="Advanced - 4" language="python" link="https://www.python.org" path="M188.477 0.210 C 143.652 2.991,108.403 19.835,101.197 41.918 C 99.981 45.643,100.000 45.226,100.000 68.687 L 100.000 90.039 150.000 90.039 L 200.000 90.039 200.000 95.018 L 200.000 99.997 122.900 100.047 L 45.801 100.098 43.555 100.712 C 12.816 109.123,-6.719 169.165,1.973 228.516 C 7.493 266.204,23.747 293.867,43.555 299.286 L 45.801 299.900 67.888 299.956 L 89.976 300.011 90.103 291.461 C 91.076 225.911,104.438 202.653,144.384 196.987 C 155.432 195.420,162.417 195.160,200.195 194.917 C 228.691 194.733,232.702 194.647,240.918 194.041 C 285.113 190.781,296.848 175.836,299.651 119.238 C 299.836 115.508,299.902 105.115,299.902 80.078 L 299.902 45.996 299.366 43.883 C 293.616 21.239,260.384 4.250,214.258 0.374 C 211.059 0.105,192.111 -0.015,188.477 0.210 M149.414 32.053 C 166.326 36.212,168.503 59.438,152.671 66.797 C 137.313 73.935,121.091 57.680,128.206 42.282 C 131.911 34.261,140.854 29.948,149.414 32.053 M309.960 104.932 C 309.948 167.842,297.172 193.464,261.927 201.260 C 248.337 204.266,238.709 204.796,192.285 205.088 C 165.527 205.257,162.007 205.338,154.199 205.966 C 115.582 209.072,103.737 224.288,100.688 274.707 C 99.918 287.424,99.624 350.474,100.315 354.507 C 103.916 375.516,134.187 393.311,175.195 398.525 C 233.513 405.940,291.087 386.417,299.286 356.445 L 299.900 354.199 299.956 332.080 L 300.011 309.961 250.006 309.961 L 200.000 309.961 200.000 304.980 L 200.000 300.000 276.333 300.000 C 345.716 300.000,352.833 299.971,354.507 299.685 C 376.246 295.959,394.536 263.535,399.004 220.801 C 399.804 213.157,399.902 210.871,399.902 200.000 C 399.902 153.217,384.540 113.801,362.028 102.825 C 356.094 99.931,356.846 100.000,331.313 100.000 L 309.961 100.000 309.960 104.932 M259.376 332.043 C 273.020 335.300,278.073 352.280,268.480 362.637 C 259.353 372.491,242.866 369.372,237.842 356.840 C 232.283 342.978,244.801 328.563,259.376 332.043"/>
           <TechStackItem experience="Intermediate - 1" language="java" link="https://www.java.com" path="M225.366 0.000 C 225.357 0.183,225.947 2.235,226.675 4.559 C 233.259 25.562,222.572 41.422,177.333 77.789 C 151.142 98.844,141.894 109.132,137.592 122.000 C 130.374 143.590,150.206 174.653,190.251 204.483 C 193.872 207.181,196.973 209.249,197.141 209.081 C 197.310 208.912,194.757 204.325,191.468 198.887 C 184.827 187.908,176.665 171.910,171.405 159.560 C 163.301 140.535,166.058 134.398,197.112 102.333 C 219.457 79.262,226.218 70.957,231.849 59.667 C 239.943 43.435,239.875 26.295,231.649 9.667 C 229.139 4.591,225.418 -1.133,225.366 0.000 M284.000 71.087 C 231.850 78.160,199.411 102.789,199.345 135.360 C 199.324 145.711,202.194 152.611,212.885 167.913 C 226.497 187.395,226.426 197.462,212.574 212.294 C 209.986 215.066,208.166 217.333,208.531 217.333 C 220.422 217.333,241.159 201.599,246.013 188.893 C 250.468 177.234,248.960 171.207,235.084 145.210 C 225.955 128.106,228.135 120.548,247.060 103.698 C 256.596 95.208,286.855 73.421,291.685 71.568 C 292.880 71.109,292.992 69.973,291.833 70.069 C 291.375 70.106,287.850 70.564,284.000 71.087 M140.333 201.126 C 94.760 202.529,68.568 211.917,72.608 225.400 C 78.299 244.395,161.034 249.634,243.667 236.232 L 254.333 234.502 263.325 228.084 C 272.824 221.305,280.269 215.380,279.835 214.946 C 279.692 214.803,277.046 215.133,273.954 215.680 C 227.449 223.899,128.186 225.620,118.283 218.379 C 114.218 215.406,125.912 209.113,145.479 203.742 C 154.656 201.223,155.645 200.617,150.278 200.804 C 148.108 200.879,143.633 201.024,140.333 201.126 M305.492 201.364 C 298.715 202.576,284.667 208.650,284.667 210.368 C 284.667 210.537,286.692 210.491,289.167 210.265 C 308.653 208.488,321.988 222.556,317.036 239.667 C 312.982 253.677,292.646 277.444,277.424 285.963 C 272.611 288.656,289.341 285.421,299.795 281.637 C 328.409 271.279,343.174 253.013,341.804 229.667 C 340.622 209.517,325.557 197.775,305.492 201.364 M126.937 246.323 C 112.932 249.370,101.135 259.141,102.912 266.222 C 106.895 282.091,168.927 290.686,221.000 282.584 C 236.008 280.249,264.425 272.675,265.657 270.682 C 265.843 270.382,260.598 266.817,254.002 262.759 L 242.010 255.382 234.505 257.342 C 186.453 269.895,118.354 263.977,132.000 248.435 C 135.082 244.925,134.492 244.680,126.937 246.323 M135.000 288.578 C 123.136 291.987,115.305 300.679,117.367 308.148 C 123.115 328.964,214.343 330.606,254.116 310.609 C 256.985 309.166,259.333 307.763,259.333 307.491 C 259.333 307.219,253.589 303.345,246.567 298.881 L 233.802 290.764 230.581 292.034 C 198.123 304.828,135.079 302.798,144.712 289.270 L 146.091 287.333 142.545 287.381 C 140.595 287.407,137.200 287.946,135.000 288.578 M78.000 309.051 C 77.083 309.215,74.533 309.661,72.333 310.042 C 45.810 314.641,35.156 330.655,49.278 344.697 C 82.902 378.131,256.349 380.779,311.280 348.698 C 330.553 337.442,332.596 322.097,316.024 313.078 C 312.029 310.903,311.798 310.970,312.678 314.040 C 316.230 326.425,303.478 336.697,275.937 343.634 C 219.856 357.760,108.654 353.300,84.724 335.965 C 73.126 327.564,87.624 317.083,109.319 318.184 C 117.421 318.595,117.501 318.790,107.148 312.928 L 100.572 309.205 90.120 308.979 C 84.370 308.855,78.917 308.888,78.000 309.051 M352.333 349.412 C 307.629 386.711,206.722 398.948,108.333 379.001 C 93.351 375.963,91.982 375.846,97.072 378.036 C 186.606 416.549,340.970 401.790,356.070 353.273 C 358.554 345.294,357.979 344.701,352.333 349.412"/>
           <TechStackItem experience="Intermediate - 3" language="javascript" link="https://www.javascript.com" path="M 6.667969 4 C 5.207031 4 4 5.207031 4 6.667969 L 4 43.332031 C 4 44.792969 5.207031 46 6.667969 46 L 43.332031 46 C 44.792969 46 46 44.796875 46 43.332031 L 46 6.667969 C 46 5.207031 44.796875 4 43.332031 4 Z M 6.667969 6 L 43.332031 6 C 43.703125 6 44 6.296875 44 6.667969 L 44 43.332031 C 44 43.703125 43.703125 44 43.332031 44 L 6.667969 44 C 6.296875 44 6 43.703125 6 43.332031 L 6 6.667969 C 6 6.296875 6.296875 6 6.667969 6 Z M 23 23 L 23 35.574219 C 23 37.503906 22.269531 38 21 38 C 19.671875 38 18.75 37.171875 18.140625 36.097656 L 15 38 C 15.910156 39.925781 18.140625 42 21.234375 42 C 24.65625 42 27 40.179688 27 36.183594 L 27 23 Z M 35.453125 23 C 32.046875 23 29.863281 25.179688 29.863281 28.042969 C 29.863281 31.148438 31.695313 32.617188 34.449219 33.789063 L 35.402344 34.199219 C 37.140625 34.960938 38 35.425781 38 36.734375 C 38 37.824219 37.171875 38.613281 35.589844 38.613281 C 33.707031 38.613281 32.816406 37.335938 32 36 L 29 38 C 30.121094 40.214844 32.132813 42 35.675781 42 C 39.300781 42 42 40.117188 42 36.683594 C 42 33.496094 40.171875 32.078125 36.925781 30.6875 L 35.972656 30.28125 C 34.335938 29.570313 33.625 29.109375 33.625 27.964844 C 33.625 27.039063 34.335938 26.328125 35.453125 26.328125 C 36.550781 26.328125 37.253906 26.792969 37.90625 27.964844 L 40.878906 26.058594 C 39.625 23.84375 37.878906 23 35.453125 23 Z" viewBox="50"/>
@@ -295,7 +319,18 @@ export default function Home() {
       </div>
 
       { /* Projects */ }
-      <div className="h-[100vh]"/>
+      <div className="featured-projects flex flex-col mt-20 mx-auto">
+        <span className="text-zinc-400 text-md tracking-wider border-b-2 border-zinc-300 pb-5 md:w-lg w-72">FEATURED PROJECTS</span>
+        <div className="projects-wrapper flex flex-col space-y-1 mt-9 md:w-5xl w-[23.5]rem h-[100vh]">
+          <ProjectItem
+            name="SSTimer"
+            description="A lightweight Windows and Mac application for League of Legends to track summoner spells. I built this application because other apps tend to have a ton of ads that run in the background, slowly down users' computer."
+            link="https://github.com/deR0R0/SSTimer"
+            image="../../public/SSTimer.png"
+            tags={["application", "electron.js", "html", "css", "javascript", "open-sourced"]}
+          />
+        </div>
+      </div>
     </div>
   );
 }

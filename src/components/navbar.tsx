@@ -162,7 +162,7 @@ export default function Navbar({ mobile, className}: { mobile?: boolean, classNa
 
     return (
         <div className={"flex flex-col " + className}>
-            <MagneticClickable className="fixed top-10 right-10 w-20 h-20 z-50 rounded-full" stiffness={125}>
+            <MagneticClickable className="fixed md:top-10 md:right-10 top-5 right-5 w-20 h-20 z-50 rounded-full" stiffness={125}>
                 <button tabIndex={-1} className="opener fixed w-20 h-20 bg-zinc-800 rounded-full" onClick={toggleUniversalNav}>
                     <svg className="m-auto" width="3rem" height="3rem" stroke="black" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path className="path1 duration-500" fill="white" d="M3 6C3 5.44772 3.44772 5 4 5H20C20.5523 5 21 5.44772 21 6C21 6.55228 20.5523 7 20 7H4C3.44772 7 3 6.55228 3 6ZM3 12C3 11.4477 3.44772 11 4 11H20C20.5523 11 21 11.4477 21 12C21 12.5523 20.5523 13 20 13H4C3.44772 13 3 12.5523 3 12ZM3 18C3 17.4477 3.44772 17 4 17H20C20.5523 17 21 17.4477 21 18C21 18.5523 20.5523 19 20 19H4C3.44772 19 3 18.5523 3 18Z"/>
