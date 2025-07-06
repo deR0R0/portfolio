@@ -69,20 +69,29 @@ export default function Home() {
 
     // what i do section text fade in on scroll effect
     const element = document.querySelector(".what-i-do-text");
-    const split = new SplitText(element, { type: "chars" });
+    const split = new SplitText(element, { type: "chars,words" });
 
+    // replace spaces with the spaces for the text wrapping
     split.chars.forEach((char, i) => {
+      if (char.textContent === ' ') {
+        char.innerHTML = '&nbsp;';
+      }
+    });
+
+    // add the inline-block and align-baseline classes to each character
+    split.chars.forEach((char, i) => {
+      char.classList.add("inline-block", "align-baseline");
       gsap.fromTo(char, 
-        { opacity: 0.25 },
-        {
-          opacity: 1,
-          scrollTrigger: {
-            trigger: element,
-            start: `clamp(top+=${i * 6} center)`,
-            end: `clamp(top+=${(i + 1) * 6} center)`,
-            scrub: true,
-          }
+      { opacity: 0.25 },
+      {
+        opacity: 1,
+        scrollTrigger: {
+        trigger: element,
+        start: `clamp(top+=${i * 6} center)`,
+        end: `clamp(top+=${(i + 1) * 6} center)`,
+        scrub: true,
         }
+      }
       );
     });
 
@@ -97,6 +106,26 @@ export default function Home() {
           scrollTrigger: {
             trigger: el,
             start: "clamp(top-=100px center)",
+            end: "clamp(bottom center)",
+            scrub: false,
+          }
+        }
+      );
+    });
+
+    // create the element slide in effect on scroll
+    const slideInElements = document.querySelectorAll(".slide-in-on-scroll");
+    slideInElements.forEach((el) => {
+      gsap.fromTo(el, 
+        {
+          x: "-20%",
+          opacity: 0
+        }, {
+          x: "0%",
+          opacity: 1,
+          scrollTrigger: {
+            trigger: el,
+            start: "clamp(top+=100px center)",
             end: "clamp(bottom center)",
             scrub: false,
           }
@@ -251,7 +280,7 @@ export default function Home() {
       <Navbar mobile={mobile} className="navigation hidden"/>
 
       { /* Big "Robert Zhao" Text */ }
-      <div className={`flex flex-col w-screen h-fit md:min-h-[700px] text-fluid-xl md:leading-tight leading-relaxed tracking-wide ${pjs.className}`}>
+      <div className={`flex flex-col w-screen h-fit text-fluid-xl md:leading-tight leading-relaxed tracking-wide ${pjs.className}`}>
         <ScrollingHobbyList className="md:mt-0 mt-10" mobile={mobile} />
         <div className="flex flex-row big-boi-1 md:mt-0 mt-5 md:ml-[5vw] mx-auto tracking-wider overflow-clip">
           <h1 className="">Robert</h1>
@@ -263,8 +292,8 @@ export default function Home() {
       </div>
       
       { /* What I Do */ }
-      <div className="what-i-do-wrapper flex flex-col mt-20 mx-auto">
-        <div className={`flex flex-col text-fluid-lg max-w-[64rem] leading-loose whitespace-break-spaces ${pjs.className}`}>
+      <div className="what-i-do-wrapper flex flex-col mt-20 mx-auto w-fluid-lg">
+        <div className={`flex flex-col text-fluid-lg max-w-[64rem] leading-loose whitespace-normal ${pjs.className}`}>
           <span className="what-i-do-text">I build simple open-sourced applications that make every-day life tasks easier.</span>
         </div>
       </div>
@@ -300,11 +329,11 @@ export default function Home() {
       </div>
 
       { /* Projects */ }
-      <div className="featured-projects flex flex-col mt-20 mx-auto w-fluid-lg">
-        <span className="text-zinc-400 text-md tracking-wider border-b-2 border-zinc-300 pb-5 md:w-lg md:ml-0 w-72 ml-5">FEATURED PROJECTS</span>
+      <div className="featured-projects flex flex-col mt-20 mx-auto w-fluid-lg fade-in-on-scroll">
+        <span className="text-zinc-400 text-md tracking-wider border-b-2 border-zinc-300 pb-5 max-w-lg">FEATURED PROJECTS</span>
         <div className="projects-wrapper flex flex-col space-y-1 mt-9 w-full h-[100vh]">
           <ProjectItem
-            className="md:ml-0 ml-3"
+            className="md:ml-0 ml-3 slide-in-on-scroll"
             name="SSTimer"
             description="A lightweight Windows and Mac application for League of Legends to track summoner spells. I built this application because other apps tend to have a ton of ads that run in the background, slowly down users' computers."
             link="https://github.com/deR0R0/SSTimer"
