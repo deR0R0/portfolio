@@ -1,5 +1,25 @@
 @import "tailwindcss";
 
+:root {
+  --font-fluid-xl: clamp(6rem, 17vw, 25rem);
+  --font-fluid-lg: clamp(2.25rem, 6vw, 4.5rem);
+  --width-fluid-lg: clamp(20rem, 80vw, 65rem);
+}
+
+@layer utilities {
+  .text-fluid-xl {
+    font-size: var(--font-fluid-xl);
+  }
+
+  .text-fluid-lg {
+    font-size: var(--font-fluid-lg);
+  }
+
+  .w-fluid-lg {
+    width: var(--width-fluid-lg);
+  }
+}
+
 ::-webkit-scrollbar {
   display: none;
 }

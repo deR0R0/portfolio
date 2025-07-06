@@ -71,38 +71,20 @@ export default function Home() {
     const element = document.querySelector(".what-i-do-text");
     const split = new SplitText(element, { type: "chars" });
 
-    if(!mobile) {
-      split.chars.forEach((char, i) => {
-        gsap.fromTo(char, 
-          { opacity: 0.25 },
-          {
-            opacity: 1,
-            scrollTrigger: {
-              trigger: element,
-              start: `clamp(top+=${i * 7} center)`,
-              end: `clamp(top+=${(i + 1) * 7} center)`,
-              scrub: true,
-            }
+    split.chars.forEach((char, i) => {
+      gsap.fromTo(char, 
+        { opacity: 0.25 },
+        {
+          opacity: 1,
+          scrollTrigger: {
+            trigger: element,
+            start: `clamp(top+=${i * 6} center)`,
+            end: `clamp(top+=${(i + 1) * 6} center)`,
+            scrub: true,
           }
-        );
-      });
-    } else {
-      // adjust for mobile devices
-      split.chars.forEach((char, i) => {
-        gsap.fromTo(char, 
-          { opacity: 0.25 },
-          {
-            opacity: 1,
-            scrollTrigger: {
-              trigger: element,
-              start: `clamp(top+=${i * 4} center)`,
-              end: `clamp(top+=${(i + 1) * 4} center)`,
-              scrub: true,
-            }
-          }
-        );
-      });
-    }
+        }
+      );
+    });
 
 
     // create the element fade in on scroll effects
@@ -117,7 +99,6 @@ export default function Home() {
             start: "clamp(top-=100px center)",
             end: "clamp(bottom center)",
             scrub: false,
-            markers: true
           }
         }
       );
@@ -270,29 +251,29 @@ export default function Home() {
       <Navbar mobile={mobile} className="navigation hidden"/>
 
       { /* Big "Robert Zhao" Text */ }
-      <div className={`flex flex-col w-screen h-fit md:min-h-[700px] md:text-[256px] text-8xl md:leading-tight leading-relaxed tracking-wide ${pjs.className}`}>
+      <div className={`flex flex-col w-screen h-fit md:min-h-[700px] text-fluid-xl md:leading-tight leading-relaxed tracking-wide ${pjs.className}`}>
         <ScrollingHobbyList className="md:mt-0 mt-10" mobile={mobile} />
-        <div className="flex flex-row big-boi-1 md:mt-0 mt-5 md:ml-10 mx-auto tracking-wider overflow-clip">
-          <span className="">Robert</span>
+        <div className="flex flex-row big-boi-1 md:mt-0 mt-5 md:ml-[5vw] mx-auto tracking-wider overflow-clip">
+          <h1 className="">Robert</h1>
         </div>
-        <div className="flex flex-row big-boi-2 md:mb-0 mb-5 md:ml-auto md:mr-10 mx-auto tracking-wider overflow-clip">
-          <span className="">Zhao</span>
+        <div className="flex flex-row big-boi-2 md:mb-0 mb-5 md:ml-auto md:mr-[5vw] mx-auto tracking-wider overflow-clip">
+          <h1 className="">Zhao</h1>
         </div>
         <ScrollingHobbyList mobile={mobile} initial="-125%" animate="0%" />
       </div>
       
       { /* What I Do */ }
       <div className="what-i-do-wrapper flex flex-col mt-20 mx-auto">
-        <div className={`flex flex-col md:text-7xl text-4xl md:w-5xl w-[23.5rem] leading-loose whitespace-break-spaces ${pjs.className}`}>
-          <span className="what-i-do-text">I build simple open-sourced  applications that make every- day life tasks easier.</span>
+        <div className={`flex flex-col text-fluid-lg max-w-[64rem] leading-loose whitespace-break-spaces ${pjs.className}`}>
+          <span className="what-i-do-text">I build simple open-sourced applications that make every-day life tasks easier.</span>
         </div>
       </div>
 
       { /* Tech Stack / Technologies I work with */ }
-      <div className="tech-stack-wrapper relative flex flex-col mt-20 mx-auto overflow-x-clip fade-in-on-scroll">
-        <span className="text-zinc-400 text-md tracking-wider border-b-2 border-zinc-300 pb-5 md:w-lg w-72">MY TECH STACK</span>
+      <div className="tech-stack-wrapper relative flex flex-col mt-20 mx-auto overflow-x-clip fade-in-on-scroll w-fluid-lg">
+        <span className="text-zinc-400 text-md tracking-wider border-b-2 border-zinc-300 pb-5 max-w-lg">MY TECH STACK</span>
         <motion.div
-          className="scrolling-tech-stack-list flex flex-row relative mt-9 space-x-16 md:w-5xl w-[23.5rem]"
+          className="scrolling-tech-stack-list flex flex-row relative mt-9 space-x-16 w-full"
           animate={{ x: "-1438.72px" }}
           initial={{ x: 0 }}
           transition={{ duration: 15, ease: "linear", repeat: Infinity }}
@@ -319,12 +300,13 @@ export default function Home() {
       </div>
 
       { /* Projects */ }
-      <div className="featured-projects flex flex-col mt-20 mx-auto">
-        <span className="text-zinc-400 text-md tracking-wider border-b-2 border-zinc-300 pb-5 md:w-lg w-72">FEATURED PROJECTS</span>
-        <div className="projects-wrapper flex flex-col space-y-1 mt-9 md:w-5xl w-[23.5]rem h-[100vh]">
+      <div className="featured-projects flex flex-col mt-20 mx-auto w-fluid-lg">
+        <span className="text-zinc-400 text-md tracking-wider border-b-2 border-zinc-300 pb-5 md:w-lg md:ml-0 w-72 ml-5">FEATURED PROJECTS</span>
+        <div className="projects-wrapper flex flex-col space-y-1 mt-9 w-full h-[100vh]">
           <ProjectItem
+            className="md:ml-0 ml-3"
             name="SSTimer"
-            description="A lightweight Windows and Mac application for League of Legends to track summoner spells. I built this application because other apps tend to have a ton of ads that run in the background, slowly down users' computer."
+            description="A lightweight Windows and Mac application for League of Legends to track summoner spells. I built this application because other apps tend to have a ton of ads that run in the background, slowly down users' computers."
             link="https://github.com/deR0R0/SSTimer"
             image="../../public/SSTimer.png"
             tags={["application", "electron.js", "html", "css", "javascript", "open-sourced"]}

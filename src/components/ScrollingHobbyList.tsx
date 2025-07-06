@@ -19,7 +19,7 @@ export default function ScrollingHobbyList({ className, mobile, initial, animate
             animate={{ x: animate || "-125%" }}
             transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
           >
-            Frontend Developer • Pianist • Gamer • Designer • Student • App Developer • Python Enthusiast • Backend Developer • Frontend Developer • Pianist • Gamer • Designer • Student • App Developer • Python Enthusiast •
+            Frontend Developer • Pianist • Gamer • Designer • Student • App Developer • Python Enthusiast • Backend Developer • Frontend Developer • Pianist • Gamer • Designer • Student • App Developer • Python Enthusiast • Backend Developer • Frontend Developer • Pianist • Gamer • Designer • Student • App Developer • Python Enthusiast •
           </motion.span>
         </div>
     )
