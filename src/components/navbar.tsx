@@ -180,7 +180,7 @@ export default function Navbar({ mobile, className}: { mobile?: boolean, classNa
                     onMouseLeave={showAll}
                 >
                     {/* Hide this from tab selection */}
-                    <div className="absolute top-0 -left-52 w-full h-full home-button-bg bg-white z-0" />
+                    <div aria-hidden="true" className="absolute top-0 -left-52 w-full h-full home-button-bg bg-white z-0" />
                     <Link
                         tabIndex={-1}
                         href="/"
@@ -191,7 +191,7 @@ export default function Navbar({ mobile, className}: { mobile?: boolean, classNa
                     onMouseEnter={e => hideOthers(e.currentTarget)}
                     onMouseLeave={showAll}
                 >
-                    <div className="absolute top-0 -left-52 w-full h-full about-button-bg bg-white" />
+                    <div aria-hidden="true" className="absolute top-0 -left-52 w-full h-full about-button-bg bg-white" />
                     <Link
                         tabIndex={-1}
                         href="/about"
@@ -202,7 +202,7 @@ export default function Navbar({ mobile, className}: { mobile?: boolean, classNa
                     onMouseEnter={e => hideOthers(e.currentTarget)}
                     onMouseLeave={showAll}    
                 >
-                    <div className="absolute top-0 -left-52 w-full h-full projects-button-bg bg-white" />
+                    <div aria-hidden="true" className="absolute top-0 -left-52 w-full h-full projects-button-bg bg-white" />
                     <Link
                         tabIndex={-1}
                         href="/projects"
@@ -213,7 +213,7 @@ export default function Navbar({ mobile, className}: { mobile?: boolean, classNa
                     onMouseEnter={e => hideOthers(e.currentTarget)}
                     onMouseLeave={showAll}
                 >
-                    <div className="absolute top-0 -left-52 w-full h-full contact-button-bg bg-white" />
+                    <div aria-hidden="true" className="absolute top-0 -left-52 w-full h-full contact-button-bg bg-white" />
                     <Link
                         tabIndex={-1}
                         href="/contact"
@@ -225,10 +225,12 @@ export default function Navbar({ mobile, className}: { mobile?: boolean, classNa
             </div>
             {/* Navigation Bar */}
             <nav className={`top-bar-nav w-full h-16 md:flex flex-row text-xl bg-transparent text-gray-800 hidden`}>
-                <Link 
-                    className={`my-auto ml-10`}
-                    href="/"
-                >Created by Robert</Link>
+                <MagneticClickable className={"hover:bg-zinc-200 rounded-2xl transition-colors duration-300 my-auto ml-5"} stiffness={50}>
+                        <Link
+                            className={`mx-5 w-fit`}
+                            href="/"
+                        >Home</Link>
+                    </MagneticClickable>
                 <div className="button-group flex flex-row ml-auto my-auto">
                     <MagneticClickable className={"hover:bg-zinc-200 rounded-2xl transition-colors duration-300"} stiffness={50}>
                         <Link

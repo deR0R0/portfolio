@@ -7,11 +7,11 @@ import { gsap, DrawSVGPlugin, ScrollTrigger, SplitText } from "gsap/all";
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { useLenis } from "../components/ScrollProvider";
-import { figtree, inter, pjs } from "./fonts";
-import Link from "next/link";
+import { pjs } from "./fonts";
 import ScrollingHobbyList from "@/components/ScrollingHobbyList";
 import TechStackItem from "@/components/TechStackItem";
 import ProjectItem from "@/components/ProjectItem";
+import Image from "next/image";
 
 gsap.registerPlugin(DrawSVGPlugin);
 gsap.registerPlugin(ScrollTrigger);
@@ -105,9 +105,10 @@ export default function Home() {
           opacity: 1,
           scrollTrigger: {
             trigger: el,
-            start: "clamp(top-=100px center)",
+            start: "clamp(top bottom-=200px)",
             end: "clamp(bottom center)",
             scrub: false,
+            markers: true
           }
         }
       );
@@ -118,14 +119,14 @@ export default function Home() {
     slideInElements.forEach((el) => {
       gsap.fromTo(el, 
         {
-          x: "-20%",
+          x: "-10%",
           opacity: 0
         }, {
           x: "0%",
           opacity: 1,
           scrollTrigger: {
             trigger: el,
-            start: "clamp(top+=100px center)",
+            start: "clamp(top bottom-=200px)",
             end: "clamp(bottom center)",
             scrub: false,
           }
@@ -251,6 +252,113 @@ export default function Home() {
     tl.current.call(() => {ScrollTrigger.refresh();}, [], "<");
   }, [loaded]);
 
+  // functions to handle the vertical image carousel for projects
+  const handleMouseMoveProjects = (e: React.MouseEvent<HTMLDivElement>, image: string) => {
+    if (mobile) return;
+
+    if(e == null) return;
+
+    // make a javascript hashmap to store the image sizes, because js/ts is trash
+    const imageSizes = new Map<string, { width: number; height: number }>();
+    imageSizes.set("image1", { width: 256, height: 300 });
+    imageSizes.set("image2", { width: 256, height: 256 });
+    imageSizes.set("image3", { width: 256, height: 256 });
+
+    // create the vars we need to make the carousel work
+    const projectItemSize = e.currentTarget.getBoundingClientRect() as DOMRect;
+    const projectPreviewer = document.querySelector(".project-previewer") as HTMLDivElement;
+    const mouseX = e.clientX as number;
+    const mouseY = e.clientY as number;
+
+    // set the project previewer size
+    gsap.to(projectPreviewer, {
+      width: imageSizes.get(image)?.width + "px",
+      height: imageSizes.get(image)?.height + "px",
+      duration: 0.5,
+      ease: "power3.out",
+    });
+
+    // show the project previewer
+    gsap.to(".project-previewer", {
+      scale: 1,
+      opacity: 1,
+      duration: 0.5,
+      ease: "power3.out",
+    });
+
+    // move the images to the correct position
+    // yes this is stupid, and yes there is a more efficient way to do this, but i don't care
+    switch (image) {
+      case "image1":
+        gsap.to(".project-preview-image1", {
+          y: 0,
+          duration: 0.5,
+          ease: "power3.out",
+        });
+        gsap.to(".project-preview-image2", {
+          y: 0,
+          duration: 0.5,
+          ease: "power3.out",
+        });
+        gsap.to(".project-preview-image3", {
+          y: 0,
+          duration: 0.5,
+          ease: "power3.out",
+        });
+        break;
+      case "image2":
+        gsap.to(".project-preview-image1", {
+          y: projectItemSize.height * -1,
+          duration: 0.5,
+          ease: "power3.out",
+        });
+        gsap.to(".project-preview-image2", {
+          y: projectItemSize.height * -1,
+          duration: 0.5,
+          ease: "power3.out",
+        });
+        gsap.to(".project-preview-image3", {
+          y: projectItemSize.height * -1,
+          duration: 0.5,
+          ease: "power3.out",
+        });
+        break;
+      case "image3":
+        gsap.to(".project-preview-image1", {
+          y: projectItemSize.height * -2,
+          duration: 0.5,
+          ease: "power3.out",
+        });
+        gsap.to(".project-preview-image2", {
+          y: projectItemSize.height * -2,
+          duration: 0.5,
+          ease: "power3.out",
+        });
+        gsap.to(".project-preview-image3", {
+          y: projectItemSize.height * -2,
+          duration: 0.5,
+          ease: "power3.out",
+        });
+        break;
+    }
+
+    // set the project previewer position
+    projectPreviewer.style.left = mouseX + "px";
+    projectPreviewer.style.top = mouseY + "px";
+  }
+
+  const handleMouseLeaveProjects = () => {
+    if (mobile) return;
+
+    // decrease the size of the project previewer
+    gsap.to(".project-previewer", {
+      scale: 0,
+      opacity: 0,
+      duration: 0.5,
+      ease: "power3.out",
+    });
+  }
+
   // return loading page if not loaded
   if(!loaded) {
     return(
@@ -331,14 +439,64 @@ export default function Home() {
       { /* Projects */ }
       <div className="featured-projects flex flex-col mt-20 mx-auto w-fluid-lg fade-in-on-scroll">
         <span className="text-zinc-400 text-md tracking-wider border-b-2 border-zinc-300 pb-5 max-w-lg">FEATURED PROJECTS</span>
+        <div aria-hidden="true" className="fixed md:flex hidden flex-col bg-zinc-300 p-5 opacity-100 z-10 project-previewer pointer-events-none overflow-hidden">
+          <div className="project-preview-image-wrapper relative flex-col w-full h-full">
+            <Image
+              src="/SSTimer.png"
+              alt="SSTimer"
+              className="absolute project-preview-image1 w-[90%] h-[90%] object-cover top-3 left-3"
+              width={256}
+              height={300}
+            />
+            <Image
+              src="/SixStones.png"
+              alt="SixStones Minecraft Plugin Icon. It depicts a glowing 6, with a diamond texture following it horizontally. The background has the default Minecraft grass block image."
+              className="absolute project-preview-image2 w-[90%] h-[90%] object-cover top-[296px] left-3"
+              width={256}
+              height={256}  
+            />
+            <Image
+              src="/CaliforniaBoombox.jpg"
+              alt="CaliforniaBoombox Mod Icon. It depicts a Lethal Company character dancing while holding a boombox with the character's face replace with Katy Perry's face."
+              className="absolute project-preview-image3 w-[90%] h-[90%] object-cover top-[592px] left-3"
+              width={256}
+              height={256}  
+            />
+          </div>
+        </div>
         <div className="projects-wrapper flex flex-col space-y-1 mt-9 w-full h-[100vh]">
           <ProjectItem
+            onMouseMove={(e) => handleMouseMoveProjects(e, "image1")}
+            onMouseLeave={handleMouseLeaveProjects}
             className="md:ml-0 ml-3 slide-in-on-scroll"
             name="SSTimer"
             description="A lightweight Windows and Mac application for League of Legends to track summoner spells. I built this application because other apps tend to have a ton of ads that run in the background, slowly down users' computers."
             link="https://github.com/deR0R0/SSTimer"
-            image="../../public/SSTimer.png"
+            starsLink="https://api.github.com/repos/deR0R0/SSTimer/stargazers"
+            image="/SSTimer.png"
             tags={["application", "electron.js", "html", "css", "javascript", "open-sourced"]}
+          />
+          <ProjectItem
+            onMouseMove={(e) => handleMouseMoveProjects(e, "image2")}
+            onMouseLeave={handleMouseLeaveProjects}
+            className="md:ml-0 ml-3 mt-5 slide-in-on-scroll"
+            name="SixStones"
+            description="A Minecraft (Java Edition) server plugin that incentivizes player PVP. The server admins spawn stones around the world. Stones grant different positive effects to players who collect them. Once one players collect all stones, they can 'end' the server. "
+            link="https://github.com/deR0R0/SixStones"
+            starsLink="https://api.github.com/repos/deR0R0/SixStones/stargazers"
+            image="/SixStones.png"
+            tags={["game-mod", "paper", "spigot", "java", "yaml", "maven", "open-sourced"]}
+          />
+          <ProjectItem
+            onMouseMove={(e) => handleMouseMoveProjects(e, "image3")}
+            onMouseLeave={handleMouseLeaveProjects}
+            className="md:ml-0 ml-3 mt-5 slide-in-on-scroll"
+            name="CaliforniaBoombox"
+            description="A Lethal Company mod that replace the boombox audio with California Girls by Katy Perry. I thought the California Gurls meme for Lethal Company was funny, so I replaced the audio with the song. Now I get to party with my friends in Lethal Company."
+            link="https://thunderstore.io/c/lethal-company/p/RoroMods/CaliforniaBoombox/"
+            downloadsLink="https://api.thunderstore.io/c/lethal-company/p/RoroMods/CaliforniaBoombox/downloads"
+            image="/CaliforniaBoombox.png"
+            tags={["game-mod", "bepinex", "unity", "c#", ".net", "closed-sourced"]}
           />
         </div>
       </div>
