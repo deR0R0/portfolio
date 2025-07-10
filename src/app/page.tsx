@@ -12,6 +12,7 @@ import ScrollingHobbyList from "@/components/ScrollingHobbyList";
 import TechStackItem from "@/components/TechStackItem";
 import ProjectItem from "@/components/ProjectItem";
 import Image from "next/image";
+import Footer from "@/components/Footer";
 
 gsap.registerPlugin(DrawSVGPlugin);
 gsap.registerPlugin(ScrollTrigger);
@@ -464,7 +465,7 @@ export default function Home() {
             />
           </div>
         </div>
-        <div className="projects-wrapper flex flex-col space-y-1 mt-9 w-full h-[100vh]">
+        <div className="projects-wrapper flex flex-col space-y-1 mt-9 w-full">
           <ProjectItem
             onMouseMove={(e) => handleMouseMoveProjects(e, "image1")}
             onMouseLeave={handleMouseLeaveProjects}
@@ -495,11 +496,13 @@ export default function Home() {
             description="A Lethal Company mod that replace the boombox audio with California Girls by Katy Perry. I thought the California Gurls meme for Lethal Company was funny, so I replaced the audio with the song. Now I get to party with my friends in Lethal Company."
             link="https://thunderstore.io/c/lethal-company/p/RoroMods/CaliforniaBoombox/"
             downloadsLink="https://api.thunderstore.io/c/lethal-company/p/RoroMods/CaliforniaBoombox/downloads"
-            image="/CaliforniaBoombox.png"
+            image="/CaliforniaBoombox.jpg"
             tags={["game-mod", "bepinex", "unity", "c#", ".net", "closed-sourced"]}
           />
         </div>
       </div>
+
+      <Footer />
     </div>
   );
 }
