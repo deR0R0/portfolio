@@ -73,7 +73,7 @@ export default function Home() {
     const split = new SplitText(element, { type: "chars,words" });
 
     // replace spaces with the spaces for the text wrapping
-    split.chars.forEach((char, i) => {
+    split.chars.forEach((char) => {
       if (char.textContent === ' ') {
         char.innerHTML = '&nbsp;';
       }
@@ -390,14 +390,14 @@ export default function Home() {
 
       { /* Big "Robert Zhao" Text */ }
       <div className={`flex flex-col w-screen h-fit text-fluid-xl md:leading-tight leading-relaxed tracking-wide ${pjs.className}`}>
-        <ScrollingHobbyList className="md:mt-0 mt-10" mobile={mobile} />
+        <ScrollingHobbyList className="md:mt-0 mt-10"/>
         <div className="flex flex-row big-boi-1 md:mt-0 mt-5 md:ml-[5vw] mx-auto tracking-wider overflow-clip">
           <h1 className="">Robert</h1>
         </div>
         <div className="flex flex-row big-boi-2 md:mb-0 mb-5 md:ml-auto md:mr-[5vw] mx-auto tracking-wider overflow-clip">
           <h1 className="">Zhao</h1>
         </div>
-        <ScrollingHobbyList mobile={mobile} initial="-125%" animate="0%" />
+        <ScrollingHobbyList initial="-125%" animate="0%" />
       </div>
       
       { /* What I Do */ }

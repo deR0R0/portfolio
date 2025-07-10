@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
-import { inter, pjs } from "./fonts";
+import { pjs } from "./fonts";
 import { LenisProvider } from "@/components/ScrollProvider";
 import "./globals.css";
-import Navbar from "@/components/navbar";
 
 export const metadata: Metadata = {
   title: "Robert Zhao",

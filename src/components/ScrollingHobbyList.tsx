@@ -2,7 +2,7 @@
 
 import { motion } from "motion/react";
 
-export default function ScrollingHobbyList({ className, mobile, initial, animate }: { className?: string, mobile?: boolean, initial?: string, animate?: string }) {
+export default function ScrollingHobbyList({ className, initial, animate }: { className?: string, initial?: string, animate?: string }) {
     return(
         <div className={`scrolling-hobby-list flex flex-row overflow-hidden whitespace-nowrap w-full relative ${className}`}>
           {/* Left Fade */}

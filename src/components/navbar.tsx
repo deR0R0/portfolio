@@ -1,15 +1,12 @@
 'use client'
 
-import { figtree } from "@/app/fonts";
+import { useState, useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger, SplitText, MorphSVGPlugin } from "gsap/all";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
 import { useLenis } from "./ScrollProvider";
 import MagneticClickable from "./MagneticClickable";
-import { off } from "process";
-import { linearGradient } from "motion/react-client";
 
 gsap.registerPlugin(ScrollTrigger);
 gsap.registerPlugin(SplitText);
@@ -119,7 +116,7 @@ export default function Navbar({ mobile, className}: { mobile?: boolean, classNa
     })
 
     const toggleUniversalNav = () => {
-        var offsetAmount = "42rem"
+        const offsetAmount = "42rem"
         
         if (navOpen) {
             gsap.to(".universal-nav", { y: "0rem", duration: 1.25, ease: "power3.inOut" });
