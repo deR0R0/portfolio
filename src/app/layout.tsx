@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { pjs } from "./fonts";
 import { LenisProvider } from "@/components/ScrollProvider";
+import { ViewTransitions } from "next-view-transitions";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -14,8 +15,8 @@ export const metadata: Metadata = {
     images: [
       {
         url: "https://robertzhao.dev/opengraph-image.png",
-        width: 1200,
-        height: 630,
+        width: 1000,
+        height: 676,
         alt: "Robert Zhao's Portfolio Website",
       },
     ],
@@ -26,12 +27,14 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children, }: Readonly<{ children: React.ReactNode;}>) {
   return (
-    <html lang="en">
-      <body className={`${pjs.className} antialiased`}>
-        <LenisProvider>
-          {children}
-        </LenisProvider>
-      </body>
-    </html>
+    <ViewTransitions>
+      <html lang="en">
+        <body className={`${pjs.className} antialiased`}>
+          <LenisProvider>
+            {children}
+          </LenisProvider>
+        </body>
+      </html>
+    </ViewTransitions>
   );
 }

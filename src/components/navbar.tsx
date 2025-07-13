@@ -7,16 +7,27 @@ import { ScrollTrigger, SplitText, MorphSVGPlugin } from "gsap/all";
 import Link from "next/link";
 import { useLenis } from "./ScrollProvider";
 import MagneticClickable from "./MagneticClickable";
+import { useTransitionRouter } from "next-view-transitions";
 
 gsap.registerPlugin(ScrollTrigger);
 gsap.registerPlugin(SplitText);
 gsap.registerPlugin(MorphSVGPlugin);
 
 export default function Navbar({ mobile, className}: { mobile?: boolean, className?: string}) {
+    const router = useTransitionRouter();
     const lenis = useLenis();
     const [navOpen, setNavOpen] = useState(false);
 
     const tl = useRef(gsap.timeline({ paused: true }));
+
+    const removeEntryAnimationElements = () => {
+        const mainDiv = document.querySelector(".page-animation");
+        // changed this to only hide the entry animation div
+        // this is because we want to keep the entry animation
+        // for page animations! (e.g: exit/entry animations)
+        mainDiv?.classList.add("hidden");
+        //mainDiv?.remove();
+    }
 
 
     const handleNavigationAnimations = (opening: boolean) => {
@@ -25,6 +36,140 @@ export default function Navbar({ mobile, className}: { mobile?: boolean, classNa
         } else {
             tl.current.reverse();
         }
+    }
+
+    const handleExitAnimation = () => {
+        return new Promise<void>((resolve) => {
+            // check for if the universal nav is open, if so, close it
+            if(navOpen) {
+                toggleUniversalNav();
+            }
+
+            // create a local timeline for the page transition
+            let pageTl = gsap.timeline({ onComplete: resolve});
+            
+            // stop lenis scrolling
+            pageTl.call(() => {lenis?.stop();});
+
+            pageTl.call(() => { document.querySelector(".page-animation")?.classList.remove("hidden"); });
+
+            pageTl.fromTo(".page-animation", {
+                opacity: 0,
+            }, {
+                opacity: 1,
+                duration: 0.5,
+                ease: "power3.out",
+            }, 0);
+
+            pageTl.fromTo(".page-animation", {
+                opacity: 0,
+            }, {
+                opacity: 1,
+                duration: 0.5,
+                ease: "power3.out",
+            }, "<");
+            
+            pageTl.fromTo(".svg-wrapper", {
+                x: "-100%",
+            }, {
+                x: "0%",
+                duration: 1.5,
+                ease: "power3.inOut",
+            }, "<+=0.5");
+
+            // play the timeline
+            pageTl.play(0);
+        });
+    }
+
+    const handleEntryAnimation = () => {
+        return new Promise<void>((resolve) => {
+            // create another local timeline for the page entry animation
+            let pageTl = gsap.timeline( { onComplete: () => { lenis?.start(); resolve; } });
+
+            // entry animation part of the timeline
+            pageTl.call(() => {lenis?.stop();});
+            pageTl.fromTo(".svg-wrapper", {
+                x: "0%",
+            }, {
+                x: "-100%",
+                duration: 1.5,
+                ease: "power3.inOut",
+            }, 0);
+
+            pageTl.fromTo(".svg-wrapper", {
+                scaleX: 1,
+                scaleY: 1
+            }, {
+                scaleX: 1.2,
+                scaleY: 0.98,
+                duration: 0.75,
+                ease: "power3.in",
+            }, "<");
+
+            pageTl.fromTo(".svg-wrapper", {
+                scaleX: 1.2,
+                scaleY: 0.98
+            }, {
+                scaleX: 1,
+                scaleY: 1,
+                duration: 0.75,
+                ease: "power3.out",
+            }, "<+=0.75");
+
+            pageTl.fromTo(".page-label", {
+                x: "700%"
+            }, {
+                x: "0%",
+                duration: 1.5,
+                ease: "power3.inOut",
+            }, "<-=0.7");
+
+            pageTl.fromTo(".page-label", {
+                scaleX: 1,
+                scaleY: 1
+            }, {
+                scaleX: 1.2,
+                scaleY: 0.98,
+                duration: 0.75,
+                ease: "power3.in",
+            }, "<");
+
+            pageTl.fromTo(".page-label", {
+                scaleX: 1.2,
+                scaleY: 0.98
+            }, {
+                scaleX: 1,
+                scaleY: 1,
+                duration: 0.75,
+                ease: "power3.out",
+            }, "<+=0.75");
+
+            pageTl.fromTo(".page-animation", {
+                opacity: 1,
+            }, {
+                opacity: 0,
+                duration: 0.5,
+                ease: "power3.out",
+            }, "<+=1");
+
+            pageTl.call(removeEntryAnimationElements, [], "<+=0.5");
+        });
+    }
+
+    const handleLinkClick = async (e: React.MouseEvent<HTMLAnchorElement>) => {
+        // prevent default link behavior, then get the element's href
+        e.preventDefault();
+        let x = e.currentTarget.getAttribute("href")
+
+        // exit animation
+        await handleExitAnimation();
+
+        // push new route to the router
+        router.push(x || "/");
+
+        // entry animation after the route has changed
+        await handleEntryAnimation();
     }
 
     
@@ -181,6 +326,7 @@ export default function Navbar({ mobile, className}: { mobile?: boolean, classNa
                     <Link
                         tabIndex={-1}
                         href="/"
+                        onClick={handleLinkClick}
                     >Home</Link>
                 </div>
                 <div
@@ -192,6 +338,7 @@ export default function Navbar({ mobile, className}: { mobile?: boolean, classNa
                     <Link
                         tabIndex={-1}
                         href="/about"
+                        onClick={handleLinkClick}
                     >About</Link>
                 </div>
                 <div
@@ -203,6 +350,7 @@ export default function Navbar({ mobile, className}: { mobile?: boolean, classNa
                     <Link
                         tabIndex={-1}
                         href="/projects"
+                        onClick={handleLinkClick}
                     >Projects</Link>
                 </div>
                 <div 
@@ -214,6 +362,7 @@ export default function Navbar({ mobile, className}: { mobile?: boolean, classNa
                     <Link
                         tabIndex={-1}
                         href="/contact"
+                        onClick={handleLinkClick}
                     >Contact</Link>
                 </div>
                 <div className="copyright-notice flex flex-rol w-fit mt-16 ml-10 overflow-clip">
@@ -226,6 +375,7 @@ export default function Navbar({ mobile, className}: { mobile?: boolean, classNa
                         <Link
                             className={`mx-5 w-fit`}
                             href="/"
+                            onClick={handleLinkClick}
                         >Home</Link>
                     </MagneticClickable>
                 <div className="button-group flex flex-row ml-auto my-auto">
@@ -233,18 +383,21 @@ export default function Navbar({ mobile, className}: { mobile?: boolean, classNa
                         <Link
                             className={`mx-5 w-fit`}
                             href="/about"
+                            onClick={handleLinkClick}
                         >About</Link>
                     </MagneticClickable>
                     <MagneticClickable className={"hover:bg-zinc-200 rounded-2xl transition-colors duration-300"} stiffness={50}>
                         <Link
                             className={`mx-5 w-fit`}
                             href="/projects"
+                            onClick={handleLinkClick}
                         >Projects</Link>
                     </MagneticClickable>
                     <MagneticClickable className={"hover:bg-zinc-200 rounded-2xl transition-colors duration-300 mr-5"} stiffness={50}>
                         <Link
                             className={`mr-5 ml-5 w-fit`}
                             href="/contact"
+                            onClick={handleLinkClick}
                         >Contact</Link>
                     </MagneticClickable>
                 </div>
