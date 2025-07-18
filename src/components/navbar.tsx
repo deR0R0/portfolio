@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger, SplitText, MorphSVGPlugin } from "gsap/all";
@@ -13,7 +13,7 @@ gsap.registerPlugin(ScrollTrigger);
 gsap.registerPlugin(SplitText);
 gsap.registerPlugin(MorphSVGPlugin);
 
-export default function Navbar({ mobile, className}: { mobile?: boolean, className?: string}) {
+export default function Navbar({ className}: { className?: string}) {
     const router = useTransitionRouter();
     const lenis = useLenis();
     const [navOpen, setNavOpen] = useState(false);
@@ -51,6 +51,8 @@ export default function Navbar({ mobile, className}: { mobile?: boolean, classNa
             // stop lenis scrolling
             pageTl.call(() => {lenis?.stop();});
 
+            pageTl.delay(0.5);
+
             pageTl.call(() => { document.querySelector(".page-animation")?.classList.remove("hidden"); });
 
             pageTl.fromTo(".page-animation", {
@@ -59,7 +61,7 @@ export default function Navbar({ mobile, className}: { mobile?: boolean, classNa
                 opacity: 1,
                 duration: 0.5,
                 ease: "power3.out",
-            }, 0);
+            }, 0.25);
 
             pageTl.fromTo(".page-animation", {
                 opacity: 0,
@@ -160,13 +162,44 @@ export default function Navbar({ mobile, className}: { mobile?: boolean, classNa
     const handleLinkClick = async (e: React.MouseEvent<HTMLAnchorElement>) => {
         // prevent default link behavior, then get the element's href
         e.preventDefault();
-        let x = e.currentTarget.getAttribute("href")
+        const link = e.currentTarget.getAttribute("href");
 
-        // exit animation
+        // check if the link is the same as the current route
+        if (link === window.location.pathname) {
+            return; // do nothing if the link is the same as the current route
+        }
+
+        // play the animations
+        const current = window.location.pathname;
+        const target = e.currentTarget.textContent;
+        const pagelabel = document.querySelector(".page-label");
+
+        // set the page label
+        if (pagelabel) {
+            pagelabel.textContent = current == "/" ? "Home" : current.charAt(1).toUpperCase() + current.substring(2);
+        }
+
         await handleExitAnimation();
 
-        // push new route to the router
-        router.push(x || "/");
+        // we want to wait for the load event to be dispatched before we push the new route
+        // this is because we want to show the loading page/stuff BEFORE the entry animation starts
+        await new Promise<void>((resolve) => {
+            window.addEventListener("ready-for-entry", () => resolve(), { once: true });
+            // push the new route to the router
+            router.push(link || "/");
+        })
+        
+
+        // set the new page label
+        if (pagelabel) {
+            pagelabel.textContent = target;
+        }
+
+        // attempt to remove the loading page elements
+        const loadingDiv = document.querySelector(".loading-status");
+        if (loadingDiv) {
+            loadingDiv.classList.add("hidden");
+        }
 
         // entry animation after the route has changed
         await handleEntryAnimation();
@@ -174,9 +207,13 @@ export default function Navbar({ mobile, className}: { mobile?: boolean, classNa
 
     
     useGSAP(() => {
+        // mobile detection
+        const agent = navigator.userAgent.toLowerCase();
+        const isMobile = /mobile|android|iphone|ipad|ipod|blackberry|iemobile|opera mini/.test(agent);
+
         // timeline animations
         const navigationSplit = new SplitText(".navigation-title", { type: "chars" });
-        const homeSplit = new SplitText(".home-button", { type: "chars" });
+        const homeSplit = new SplitText(".home-button", { type: "chars" }); // TODO: fix split text so it doesn't interfere with the router
         const aboutSplit = new SplitText(".about-button", { type: "chars" });
         const projectsSplit = new SplitText(".projects-button", { type: "chars" });
         const contactSplit = new SplitText(".contact-button", { type: "chars" });
@@ -241,8 +278,8 @@ export default function Navbar({ mobile, className}: { mobile?: boolean, classNa
         }, "<+=0.1"
         );
 
-        // stop the events below if on mobile, we want the universal nav bar to be visible at all times
-        if(mobile) return;
+        // dont let the rest of this stuff run on mobile
+        if (isMobile) { return; }
 
         // hide the button to open the universal nav bar when on load.
         gsap.fromTo(".opener", { scale: 1 }, { scale: 0, duration: 0.01})
@@ -258,7 +295,7 @@ export default function Navbar({ mobile, className}: { mobile?: boolean, classNa
             },
             onLeave: () => { gsap.fromTo(".opener", { scale: 0 }, { scale: 1, duration: 0.5, ease: "bounce.out"}) },
         })
-    })
+    });
 
     const toggleUniversalNav = () => {
         const offsetAmount = "42rem"
@@ -317,53 +354,53 @@ export default function Navbar({ mobile, className}: { mobile?: boolean, classNa
                     <span className="text-sm text-zinc-500">NAVIGATION</span>
                 </div>
                 <div
-                    className="home-button flex flex-rol w-fit p-2 mt-12 ml-8 overflow-clip relative"
+                    className="flex flex-rol w-fit p-2 mt-12 ml-8 overflow-clip relative"
                     onMouseEnter={e => hideOthers(e.currentTarget)}
                     onMouseLeave={showAll}
                 >
                     {/* Hide this from tab selection */}
-                    <div aria-hidden="true" className="absolute top-0 -left-52 w-full h-full home-button-bg bg-white z-0" />
+                    <div aria-hidden="true" className="absolute top-0 -left-52 w-full h-full home-button-bg bg-white pointer-events-none" />
                     <Link
-                        tabIndex={-1}
+                        tabIndex={ navOpen ? 0 : -1 }
                         href="/"
                         onClick={handleLinkClick}
-                    >Home</Link>
+                    ><span className="home-button">Home</span></Link>
                 </div>
                 <div
-                    className="about-button flex flex-rol w-fit p-2 mt-12 ml-8 overflow-clip relative"
+                    className="flex flex-rol w-fit p-2 mt-12 ml-8 overflow-clip relative"
                     onMouseEnter={e => hideOthers(e.currentTarget)}
                     onMouseLeave={showAll}
                 >
-                    <div aria-hidden="true" className="absolute top-0 -left-52 w-full h-full about-button-bg bg-white" />
+                    <div aria-hidden="true" className="absolute top-0 -left-52 w-full h-full about-button-bg bg-white pointer-events-none" />
                     <Link
-                        tabIndex={-1}
+                        tabIndex={ navOpen ? 0 : -1 }
                         href="/about"
                         onClick={handleLinkClick}
-                    >About</Link>
+                    ><span className="about-button">About</span></Link>
                 </div>
                 <div
-                    className="projects-button flex flex-rol w-fit p-2 mt-12 ml-8 overflow-clip relative"
+                    className="flex flex-rol w-fit p-2 mt-12 ml-8 overflow-clip relative"
                     onMouseEnter={e => hideOthers(e.currentTarget)}
                     onMouseLeave={showAll}    
                 >
                     <div aria-hidden="true" className="absolute top-0 -left-52 w-full h-full projects-button-bg bg-white" />
                     <Link
-                        tabIndex={-1}
+                        tabIndex={ navOpen ? 0 : -1 }
                         href="/projects"
                         onClick={handleLinkClick}
-                    >Projects</Link>
+                    ><span className="projects-button">Projects</span></Link>
                 </div>
                 <div 
-                    className="contact-button flex flex-rol w-fit p-2 mt-12 ml-8 overflow-clip relative"
+                    className="flex flex-rol w-fit p-2 mt-12 ml-8 overflow-clip relative"
                     onMouseEnter={e => hideOthers(e.currentTarget)}
                     onMouseLeave={showAll}
                 >
                     <div aria-hidden="true" className="absolute top-0 -left-52 w-full h-full contact-button-bg bg-white" />
                     <Link
-                        tabIndex={-1}
+                        tabIndex={ navOpen ? 0 : -1 }
                         href="/contact"
                         onClick={handleLinkClick}
-                    >Contact</Link>
+                    ><span className="contact-button">Contact</span></Link>
                 </div>
                 <div className="copyright-notice flex flex-rol w-fit mt-16 ml-10 overflow-clip">
                     <span className="text-sm text-zinc-500">© MIT License Robert Zhao</span>

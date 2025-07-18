@@ -3,6 +3,8 @@ import { pjs } from "./fonts";
 import { LenisProvider } from "@/components/ScrollProvider";
 import { ViewTransitions } from "next-view-transitions";
 import "./globals.css";
+import Navbar from "@/components/navbar";
+import PageAnimation from "@/components/PageAnimation";
 
 export const metadata: Metadata = {
   title: "Robert Zhao",
@@ -26,11 +28,13 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children, }: Readonly<{ children: React.ReactNode;}>) {
+
   return (
     <ViewTransitions>
       <html lang="en">
         <body className={`${pjs.className} antialiased`}>
           <LenisProvider>
+            <PageAnimation page="Home" />
             {children}
           </LenisProvider>
         </body>
