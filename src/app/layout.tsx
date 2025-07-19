@@ -35,6 +35,7 @@ export default function RootLayout({ children, }: Readonly<{ children: React.Rea
         <body className={`${pjs.className} antialiased`}>
           <LenisProvider>
             <PageAnimation page="Home" />
+            <Navbar className="navigation hidden" />
             {children}
           </LenisProvider>
         </body>

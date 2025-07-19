@@ -29,7 +29,7 @@ export default function About() {
 
     return (
         <div className="main-content">
-            <Navbar className="navigation" />
+            <p>Hello, You're on the about page!</p>
         </div>
     )
 }

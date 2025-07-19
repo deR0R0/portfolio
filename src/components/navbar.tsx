@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger, SplitText, MorphSVGPlugin } from "gsap/all";
@@ -46,7 +46,7 @@ export default function Navbar({ className}: { className?: string}) {
             }
 
             // create a local timeline for the page transition
-            let pageTl = gsap.timeline({ onComplete: resolve});
+            const pageTl = gsap.timeline({ onComplete: resolve});
             
             // stop lenis scrolling
             pageTl.call(() => {lenis?.stop();});
@@ -87,7 +87,7 @@ export default function Navbar({ className}: { className?: string}) {
     const handleEntryAnimation = () => {
         return new Promise<void>((resolve) => {
             // create another local timeline for the page entry animation
-            let pageTl = gsap.timeline( { onComplete: () => { lenis?.start(); resolve; } });
+            const pageTl = gsap.timeline( { onComplete: () => { lenis?.start(); resolve(); } });
 
             // entry animation part of the timeline
             pageTl.call(() => {lenis?.stop();});
