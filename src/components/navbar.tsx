@@ -166,7 +166,7 @@ export default function Navbar({ className}: { className?: string}) {
 
         // check if the link is the same as the current route
         if (link === window.location.pathname) {
-            return; // do nothing if the link is the same as the current route
+            return;
         }
 
         // play the animations
@@ -181,6 +181,9 @@ export default function Navbar({ className}: { className?: string}) {
 
         await handleExitAnimation();
 
+        document.querySelector(".page-animation")?.classList.remove("hidden");
+        document.querySelector(".page-animation-loading")?.classList.remove("opacity-0");
+
         // we want to wait for the load event to be dispatched before we push the new route
         // this is because we want to show the loading page/stuff BEFORE the entry animation starts
         await new Promise<void>((resolve) => {
@@ -189,16 +192,13 @@ export default function Navbar({ className}: { className?: string}) {
             router.push(link || "/");
         })
         
+        document.querySelector(".page-animation-loading")?.classList.add("opacity-0");
+
+        document.querySelector(".loading-status")?.classList.add("hidden");
 
         // set the new page label
         if (pagelabel) {
             pagelabel.textContent = target;
-        }
-
-        // attempt to remove the loading page elements
-        const loadingDiv = document.querySelector(".loading-status");
-        if (loadingDiv) {
-            loadingDiv.classList.add("hidden");
         }
 
         // entry animation after the route has changed

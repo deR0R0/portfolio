@@ -36,7 +36,7 @@ export default function Home() {
   useEffect(() => {
     const handleLoad = () => {
       document.body.style.overflow = "hidden";
-      document.getElementsByClassName("idk-what-to-name-this")[0]?.classList.add("opacity-0");
+      document.getElementsByClassName("loading-status")[0]?.classList.add("opacity-0");
       // we also need to trigger the entry page animation
       window.dispatchEvent(new Event("ready-for-entry"));
       setTimeout(() => {
@@ -142,7 +142,7 @@ export default function Home() {
     tl.current.clear();
 
     // check for loaded elements
-    if (!document.querySelector(".page-animation")) return;
+    if (!document.querySelector(".main-content")) return;
 
     // landing page animation part of the timeline
     tl.current.call(() => {ScrollTrigger.refresh();}, [], "<");
