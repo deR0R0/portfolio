@@ -11,7 +11,6 @@ import TechStackItem from "@/components/TechStackItem";
 import ProjectItem from "@/components/ProjectItem";
 import Image from "next/image";
 import Footer from "@/components/Footer";
-import { view } from "motion/react-client";
 
 gsap.registerPlugin(DrawSVGPlugin);
 gsap.registerPlugin(ScrollTrigger);

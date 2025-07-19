@@ -1,6 +1,5 @@
 'use client';
 
-import Navbar from "@/components/navbar";
 import { useEffect, useState } from "react";
 
 export default function About() {
@@ -29,7 +28,7 @@ export default function About() {
 
     return (
         <div className="main-content">
-            <p>Hello, You're on the about page!</p>
+            <p>Hello, Youre on the about page!</p>
         </div>
     )
 }
