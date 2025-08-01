@@ -1,23 +1,34 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700&display=swap');
 @import "tailwindcss";
-
-:root {
-  --font-fluid-xl: clamp(6rem, 17vw, 25rem);
-  --font-fluid-lg: clamp(2.25rem, 6vw, 4.5rem);
-  --width-fluid-lg: clamp(20rem, 80vw, 65rem);
-}
 
 @layer utilities {
   .text-fluid-xl {
-    font-size: var(--font-fluid-xl);
+    font-size: clamp(6rem, 17vw, 25rem);
   }
 
   .text-fluid-lg {
-    font-size: var(--font-fluid-lg);
+    font-size: clamp(2.25rem, 6vw, 4.5rem);
   }
 
   .w-fluid-lg {
-    width: var(--width-fluid-lg);
+    width: clamp(20rem, 80vw, 65rem);
   }
+
+  @media (min-width: 768px) {
+    .lg\:w-card {
+      width: clamp(10rem, 30vw, 22rem);
+    }
+  }
+
+  .w-card {
+    width: clamp(10rem, 30vw, 22rem);
+  }
+
+  @media (max-width: 1024px) {
+    .w-card-mobile {
+      width: clamp(10rem, 80vw, 26rem);
+    }
+  } 
 }
 
 ::-webkit-scrollbar {

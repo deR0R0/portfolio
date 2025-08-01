@@ -35,8 +35,10 @@ export default function Footer() {
             <div data-speed="0.1" className="flex flex-col mx-auto mt-20 text-sm space-y-3">
                 <span className="text-lg text-zinc-400 mb-3">Credits</span>
                 <span>Created By Robert Zhao</span>
+                <Link className="hover:underline" href="https://react-icons.github.io/react-icons">React Icons</Link>
                 <span className="text-lg text-zinc-400">Inspiration</span>
                 <Link className="hover:underline" href="https://dennissnellenberg.com">Dennis Snellenberg</Link>
+                <Link className="hover:underline" href="https://dribbble.com/shots/22434425-Bento-Cards">Bento Cards - Dribbble</Link>
                 <Link className="hover:underline" href="https://github.com/emmabostian/developer-portfolios">A Ton More!</Link>
             </div>
             <div data-speed="0.1" className="flex flex-col mx-auto mt-20 text-sm space-y-3">

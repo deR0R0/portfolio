@@ -223,7 +223,8 @@ export default function Navbar({ className}: { className?: string}) {
 
         tl.current
         .fromTo(navigationSplit.chars, {
-            y: 30
+            y: 30,
+            opacity: 0
         }, {
             duration: 0.35,
             y: 0,
@@ -232,7 +233,8 @@ export default function Navbar({ className}: { className?: string}) {
             ease: "sine.out",
         }, "+=0.75")
         .fromTo(homeSplit.chars, {
-            y: 50
+            y: 50,
+            opacity: 0
         }, {
             duration: 0.4,
             y: 0,
@@ -241,7 +243,8 @@ export default function Navbar({ className}: { className?: string}) {
             ease: "sine.out",
         }, "<+=0.1")
         .fromTo(aboutSplit.chars, {
-            y: 50
+            y: 50,
+            opacity: 0
         }, {
             duration: 0.4,
             y: 0,
@@ -250,7 +253,8 @@ export default function Navbar({ className}: { className?: string}) {
             ease: "sine.out",
         }, "<+=0.1")
         .fromTo(projectsSplit.chars, {
-            y: 50
+            y: 50,
+            opacity: 0
         }, {
             duration: 0.4,
             y: 0,
@@ -259,7 +263,8 @@ export default function Navbar({ className}: { className?: string}) {
             ease: "sine.out",
         }, "<+=0.1")
         .fromTo(contactSplit.chars, {
-            y: 50
+            y: 50,
+            opacity: 0
         }, {
             duration: 0.4,
             y: 0,
@@ -269,6 +274,7 @@ export default function Navbar({ className}: { className?: string}) {
         }, "<+=0.1")
         .fromTo(copyrightSplit.words, {
             y: 50,
+            opacity: 0
         }, {
             duration: 0.4,
             y: 0,
@@ -314,7 +320,7 @@ export default function Navbar({ className}: { className?: string}) {
     }
 
     const hideOthers = (hovered: HTMLDivElement) => {
-        const buttons = document.querySelectorAll(".home-button, .about-button, .projects-button, .contact-button");
+        const buttons = document.querySelectorAll(".home-button-wrapper, .about-button-wrapper, .projects-button-wrapper, .contact-button-wrapper");
         const bgs = document.querySelectorAll(".home-button-bg, .about-button-bg, .projects-button-bg, .contact-button-bg");
         buttons.forEach((button) => {
             if (button !== hovered) {
@@ -329,7 +335,7 @@ export default function Navbar({ className}: { className?: string}) {
     }
 
     const showAll = () => {
-        const buttons = document.querySelectorAll(".home-button, .about-button, .projects-button, .contact-button");
+        const buttons = document.querySelectorAll(".home-button-wrapper, .about-button-wrapper, .projects-button-wrapper, .contact-button-wrapper");
         const bgs = document.querySelectorAll(".home-button-bg, .about-button-bg, .projects-button-bg, .contact-button-bg");
         buttons.forEach((button) => {
             gsap.to(button, { opacity: 1, duration: 0.5 });
@@ -354,7 +360,7 @@ export default function Navbar({ className}: { className?: string}) {
                     <span className="text-sm text-zinc-500">NAVIGATION</span>
                 </div>
                 <div
-                    className="flex flex-rol w-fit p-2 mt-12 ml-8 overflow-clip relative"
+                    className="home-button-wrapper flex flex-rol w-fit p-2 mt-12 ml-8 overflow-clip relative"
                     onMouseEnter={e => hideOthers(e.currentTarget)}
                     onMouseLeave={showAll}
                 >
@@ -367,7 +373,7 @@ export default function Navbar({ className}: { className?: string}) {
                     ><span className="home-button">Home</span></Link>
                 </div>
                 <div
-                    className="flex flex-rol w-fit p-2 mt-12 ml-8 overflow-clip relative"
+                    className="about-button-wrapper flex flex-rol w-fit p-2 mt-12 ml-8 overflow-clip relative"
                     onMouseEnter={e => hideOthers(e.currentTarget)}
                     onMouseLeave={showAll}
                 >
@@ -379,7 +385,7 @@ export default function Navbar({ className}: { className?: string}) {
                     ><span className="about-button">About</span></Link>
                 </div>
                 <div
-                    className="flex flex-rol w-fit p-2 mt-12 ml-8 overflow-clip relative"
+                    className="projects-button-wrapper flex flex-rol w-fit p-2 mt-12 ml-8 overflow-clip relative"
                     onMouseEnter={e => hideOthers(e.currentTarget)}
                     onMouseLeave={showAll}    
                 >
@@ -391,7 +397,7 @@ export default function Navbar({ className}: { className?: string}) {
                     ><span className="projects-button">Projects</span></Link>
                 </div>
                 <div 
-                    className="flex flex-rol w-fit p-2 mt-12 ml-8 overflow-clip relative"
+                    className="contact-button-wrapper flex flex-rol w-fit p-2 mt-12 ml-8 overflow-clip relative"
                     onMouseEnter={e => hideOthers(e.currentTarget)}
                     onMouseLeave={showAll}
                 >
