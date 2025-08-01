@@ -18,30 +18,6 @@ import Image from "next/image";
 gsap.registerPlugin(ScrollTrigger);
 
 export function InterestCard({ className } : { className?: string }) {
-    const [position, setPosition] = useState({ x: 0, y: 0 });
-
-    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-        const target = e.currentTarget;
-        if (!target) return;
-
-        // get the position stuff
-        const bounds = target.getBoundingClientRect()
-        const centerX = bounds.left + bounds.width / 2
-        const centerY = bounds.top + bounds.height / 2
-
-        const deltaX = e.clientX - centerX
-        const deltaY = e.clientY - centerY
-
-        const rotateX = (deltaY / bounds.height) * -20
-        const rotateY = (deltaX / bounds.width) * 20
-
-        setPosition({ x: rotateX, y: rotateY });
-    }
-
-    const resetCardPosition = () => {
-        setPosition({ x: 0, y: 0 });
-    }
-
     useGSAP(() => {
         if(document.readyState !== "complete") return;
 
@@ -60,40 +36,31 @@ export function InterestCard({ className } : { className?: string }) {
 
     return (
         <motion.div
-            onMouseMove={handleMouseMove}
-            onMouseLeave={resetCardPosition}
-            className={className}
+            className="flex flex-col w-card-mobile lg:w-card shadow-[0px_10px_25px_-5px_rgba(0,_0,_0,_0.15)] border-[2px] border-[#F1F1F1] rounded-2xl pb-5 h-[40rem]"
         >
-            <motion.div
-                className="flex flex-col w-card-mobile lg:w-card shadow-[0px_10px_25px_-5px_rgba(0,_0,_0,_0.15)] border-[2px] border-[#F1F1F1] rounded-2xl pb-5 h-[40rem]"
-                animate={{ rotateX: position.x, rotateY: position.y }}
-                transition={{ type: "spring", stiffness: 200, damping: 20 }}
-            >
-                <div className="p-2 space-y-6.25">
-                    <MdInterests className="w-10 h-10 mt-3" />
-                    <h1 className="text-2xl mt-3 pb-5">Hobbies/Interests</h1>
-                    <InterestsCardItem color="bg-orange-400" title="Problem Solving">
-                        <LuBrain className="w-6 h-6" />
-                    </InterestsCardItem>
-                    <InterestsCardItem color="bg-red-400" title="Electronics">
-                        <TbCircuitBattery className="w-6 h-6" />
-                    </InterestsCardItem>
-                    <InterestsCardItem color="bg-yellow-400" title="Programming">
-                        <FaCode className="w-6 h-6" />
-                    </InterestsCardItem>
-                    <InterestsCardItem color="bg-green-400" title="Photography">
-                        <IoCameraOutline className="w-6 h-6" />
-                    </InterestsCardItem>
-                    <InterestsCardItem color="bg-blue-400" title="Video Editing">
-                        <PiFilmSlate className="w-6 h-6" />
-                    </InterestsCardItem>
-                    <InterestsCardItem color="bg-purple-400" title="Gaming">
-                        <IoGameControllerOutline className="w-6 h-6" />
-                    </InterestsCardItem>
-                </div>
-            </motion.div>
+            <div className="p-2 space-y-6.25">
+                <MdInterests className="w-10 h-10 mt-3" />
+                <h1 className="text-2xl mt-3 pb-5">Hobbies/Interests</h1>
+                <InterestsCardItem color="bg-orange-400" title="Problem Solving">
+                    <LuBrain className="w-6 h-6" />
+                </InterestsCardItem>
+                <InterestsCardItem color="bg-red-400" title="Electronics">
+                    <TbCircuitBattery className="w-6 h-6" />
+                </InterestsCardItem>
+                <InterestsCardItem color="bg-yellow-400" title="Programming">
+                    <FaCode className="w-6 h-6" />
+                </InterestsCardItem>
+                <InterestsCardItem color="bg-green-400" title="Photography">
+                    <IoCameraOutline className="w-6 h-6" />
+                </InterestsCardItem>
+                <InterestsCardItem color="bg-blue-400" title="Video Editing">
+                    <PiFilmSlate className="w-6 h-6" />
+                </InterestsCardItem>
+                <InterestsCardItem color="bg-purple-400" title="Gaming">
+                    <IoGameControllerOutline className="w-6 h-6" />
+                </InterestsCardItem>
+            </div>
         </motion.div>
-        
     )
 }
 
