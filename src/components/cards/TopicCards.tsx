@@ -7,7 +7,7 @@ import { LuBrain } from "react-icons/lu";
 import { FaCircleArrowDown, FaCode } from "react-icons/fa6";
 import { TbCircuitBattery, TbTimelineEventFilled } from "react-icons/tb";
 import { PiFilmSlate } from "react-icons/pi";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "motion/react";
 import Timeline from "../timeline/Timeline";
 import gsap from "gsap";
@@ -18,6 +18,13 @@ import Image from "next/image";
 gsap.registerPlugin(ScrollTrigger);
 
 export function InterestCard({ className } : { className?: string }) {
+    const intervalRef = useRef<NodeJS.Timeout | null>(null);
+    const [rotation, setRotation] = useState(0);
+
+    useEffect(() => {
+        document.documentElement.style.setProperty('--bg-rotate', `${rotation}deg`);
+    }, [rotation]);
+
     useGSAP(() => {
         if(document.readyState !== "complete") return;
 
@@ -34,11 +41,28 @@ export function InterestCard({ className } : { className?: string }) {
         })
     }, []);
 
+    const mouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
+        e.currentTarget.firstElementChild?.classList.remove("opacity-0");
+        // increase rotation
+        intervalRef.current = setInterval(() => {
+            setRotation(prev => prev + 1);
+        }, 16);
+    }
+
+    const mouseLeave = (e: React.MouseEvent<HTMLDivElement>) => {
+        // reset rotation
+        clearInterval(intervalRef.current!);
+        e.currentTarget.firstElementChild?.classList.add("opacity-0");
+    }
+
     return (
-        <motion.div
-            className="flex flex-col w-card-mobile lg:w-card shadow-[0px_10px_25px_-5px_rgba(0,_0,_0,_0.15)] border-[2px] border-[#F1F1F1] rounded-2xl pb-5 h-[40rem]"
+        <div
+            className={`flex flex-col relative w-card-mobile lg:w-card shadow-[0px_10px_25px_-5px_rgba(0,_0,_0,_0.15)] border-[2px] border-[#F1F1F1] rounded-2xl h-[40rem] ${className}`}
+            onMouseEnter={mouseEnter}
+            onMouseLeave={mouseLeave}
         >
-            <div className="p-2 space-y-6.25">
+            <div className="card-background-1 absolute -top-[0.5%] -left-[1%] w-[102%] h-[101%] rounded-[1.05rem] opacity-0 duration-200"/>
+            <div className="p-2 space-y-6.25 bg-white relative z-10 rounded-2xl pb-9">
                 <MdInterests className="w-10 h-10 mt-3" />
                 <h1 className="text-2xl mt-3 pb-5">Hobbies/Interests</h1>
                 <InterestsCardItem color="bg-orange-400" title="Problem Solving">
@@ -60,14 +84,17 @@ export function InterestCard({ className } : { className?: string }) {
                     <IoGameControllerOutline className="w-6 h-6" />
                 </InterestsCardItem>
             </div>
-        </motion.div>
+        </div>
     )
 }
 
 export function ProgrammingTimeline({ className } : { className?: string }) {
     return (
-        <div className={`programming-timeline relative flex flex-col w-card-mobile lg:w-card shadow-[0px_10px_25px_-5px_rgba(0,_0,_0,_0.15)] border-[2px] border-[#F1F1F1] rounded-2xl pb-5 min-h-0 h-[40rem] overflow-y-scroll ${className}`} data-lenis-prevent>
-            <div className="p-2">
+        <div
+            className={`programming-timeline relative flex flex-col w-card-mobile lg:w-card shadow-[0px_10px_25px_-5px_rgba(0,_0,_0,_0.15)] border-[2px] border-[#F1F1F1] rounded-2xl pb-5 min-h-0 h-[40rem] overflow-y-scroll ${className}`}
+            data-lenis-prevent
+        >
+            <div className="p-2 bg-white relative z-10 rounded-2xl">
                 <TbTimelineEventFilled className="w-10 h-10 mt-3" />
                 <h1 className="text-2xl mt-3">Experience Timeline</h1>
                 <Timeline />

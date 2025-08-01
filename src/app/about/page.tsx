@@ -111,7 +111,7 @@ export default function About() {
             stagger: 0.25,
         }, "<+=1");
 
-        
+
 
         // cleanup
         return () => {
@@ -180,12 +180,15 @@ export default function About() {
                 </div>
                 <span className="bg-zinc-200 rounded-full w-fit mx-auto px-3 py-1 text-xs">Student • Software Developer</span>
             </div>
+
             { /* cards */ }
             <div className="cards-container flex lg:flex-row flex-col justify-center mt-10 space-x-10 lg:space-y-0 space-y-20 mb-10">
                 <InterestCard className="card lg:mx-0 lg:mr-10 mx-auto" />
                 <ProgrammingTimeline className="card lg:mx-0 lg:mr-10 mx-auto" />
                 <GithubStats className="card lg:mx-0 mx-auto" />
             </div>
+
+            { /*  */ }
         </div>
     )
 }
