@@ -27,7 +27,6 @@ export default function About() {
         // send a custom event to the window
         const handleOnLoad = () => {
             document.querySelector(".navigation")?.classList.remove("hidden");
-            document.body.style.overflow = "hidden";
             document.getElementsByClassName("loading-status")[0]?.classList.add("opacity-0");
             window.dispatchEvent(new Event("ready-for-entry"));
 
@@ -227,7 +226,7 @@ export default function About() {
             <div className="w-fluid-lg mx-auto flex flex-col mt-20">
                 <h1 className="text-md text-zinc-400 tracking-wide border-b-2 border-zinc-300 pb-3">ABOUT ME</h1>
                 <div className="flex md:flex-row flex-col mt-10">
-                    <div className="flex flex-col md:w-[70%] md:mr-10 w-full mr-0 text-[1.4rem] md:indent-20 indent-10">
+                    <div className="flex flex-col md:w-[70%] md:mr-10 w-full mr-0 md:text-[1.4rem] text-[1rem] md:indent-20 indent-10">
                         <p className="tracking-normal leading-15">Hello, I&apos;m Robert Zhao. I&apos;m currently a student at <Link className="underline text-red-400" href="https://www.tjhsst.edu/">TJHSST</Link> (Class of 2028) and I love technology. I&apos;m currently mostly a full-stack developer, but planning on exploring more into the backend, artificial intelligence, and machine learning.</p>
                         <p className="tracking-normal leading-15 mt-5">I started programming in 2018, and have been developing software ever since. I love the feeling of creating something from nothing, and seeing it come to life. I also love the challenge of solving complex problems, and finding the most efficient solution for them.</p>
                         <p className="tracking-normal leading-15 mt-5">In my free time, I usually enjoy playing video games, video editing, or photography. It&apos;s a great way to release stress from my day and express my inner creativity.</p>
@@ -249,7 +248,7 @@ export default function About() {
             <div className="w-fluid-lg mx-auto flex flex-col mt-20">
                 <h1 className="text-md text-zinc-400 tracking-wide border-b-2 border-zinc-300 pb-3">CURRENT WORK</h1>
                 <div className="flex flex-col mt-10 md:indent-20 indent-10">
-                    <p className="text-2xl tracking-normal text-left leading-15">I&apos;m currently working on this portfolio, expanding into multiple areas of Next.js and exploring how to integrate GSAP and Framer together. I&apos;m also planning on working on a marble game in Java. Although I haven&apos;t started, I&apos;m designing how the gameplay will work.</p>
+                    <p className="md:text-2xl text-[1rem] tracking-normal text-left leading-15">I&apos;m currently working on this portfolio, expanding into multiple areas of Next.js and exploring how to integrate GSAP and Framer together. I&apos;m also planning on working on a marble game in Java. Although I haven&apos;t started, I&apos;m designing how the gameplay will work.</p>
                 </div>
             </div>
 
