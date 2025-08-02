@@ -4,10 +4,21 @@ import { GithubStats, InterestCard, ProgrammingTimeline } from "@/components/car
 import HomePageLoader from "@/components/MainLoader";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import { DrawSVGPlugin } from "gsap/all";
+import { DrawSVGPlugin, ScrollTrigger } from "gsap/all";
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
+import SkillsSection from "@/components/skills/SkillsSection";
+import { FaWindows } from "react-icons/fa";
+import OS from "@/components/skills/OS";
+import Language from "@/components/skills/Language";
+import Framework from "@/components/skills/Framework";
+import Library from "@/components/skills/Library";
+import { FiMail } from "react-icons/fi";
+import Link from "next/link";
+import Footer from "@/components/Footer";
 
 gsap.registerPlugin(DrawSVGPlugin);
+gsap.registerPlugin(ScrollTrigger);
 
 export default function About() {
     const [loaded, setLoaded] = useState(false);
@@ -36,6 +47,7 @@ export default function About() {
         }
     }, []);
 
+    // timeline animation
     useGSAP(() => {
         // added this to shut gsap up about missing targets
         if(!loaded) return;
@@ -120,6 +132,26 @@ export default function About() {
     }, [loaded]);
 
 
+    // scroll triggers, etc for gsap
+    useGSAP(() => {
+        if(!loaded) return;
+
+        const beachImage = document.querySelector(".about-image-beach") as HTMLImageElement;
+        if(!beachImage) return;
+
+        gsap.to(beachImage, {
+            y: "-20%",
+            ease: "none",
+            scrollTrigger: {
+                trigger: beachImage,
+                start: "top bottom",
+                end: "bottom top",
+                scrub: true,
+            }
+        })
+    }, [loaded]);
+
+
 
     // loading page
     if(!loaded) {
@@ -188,7 +220,102 @@ export default function About() {
                 <GithubStats className="card lg:mx-0 mx-auto" />
             </div>
 
-            { /*  */ }
+            { /* about */ }
+            <div className="w-fluid-lg mx-auto flex flex-col mt-20">
+                <h1 className="text-md text-zinc-400 tracking-wide border-b-2 border-zinc-300 pb-3">ABOUT ME</h1>
+                <div className="flex md:flex-row flex-col mt-10">
+                    <div className="flex flex-col md:w-[70%] md:mr-10 w-full mr-0 text-[1.4rem] md:indent-20 indent-10">
+                        <p className="tracking-normal leading-15">Hello, I'm Robert Zhao. I'm currently a student at <Link className="underline text-red-400" href="https://www.tjhsst.edu/">TJHSST</Link> (Class of 2028) and I love technology. I'm currently mostly a full-stack developer, but planning on exploring more into the backend, artificial intelligence, and machine learning.</p>
+                        <p className="tracking-normal leading-15 mt-5">I started programming in 2018, and have been developing software ever since. I love the feeling of creating something from nothing, and seeing it come to life. I also love the challenge of solving complex problems, and finding the most efficient solution for them.</p>
+                        <p className="tracking-normal leading-15 mt-5">In my free time, I usually enjoy playing video games, video editing, or photography. It's a great way to release stress from my day and express my inner creativity.</p>
+                    </div>
+                    <div className="flex flex-col md:w-1/4 w-full md:mx-0 md:my-auto mx-auto mt-10 relative overflow-hidden h-100">
+                        <div className="absolute inset-0 bg-white z-0"></div>
+                        <Image
+                            src="/Beach.png"
+                            alt="A picture of the site creator: Robert Zhao on the beach at sunset. The sky is a gradient of sky blue and a pinkish color. The sun setting on the right side of the image. Robert is facing towards the sea taking in the view."
+                            width={453}
+                            height={791}
+                            className="about-image-beach absolute top-0 left-0 w-full h-[120%] object-cover"
+                        />
+                    </div>
+                </div>
+            </div>
+
+            { /* current work */ }
+            <div className="w-fluid-lg mx-auto flex flex-col mt-20">
+                <h1 className="text-md text-zinc-400 tracking-wide border-b-2 border-zinc-300 pb-3">CURRENT WORK</h1>
+                <div className="flex flex-col mt-10 md:indent-20 indent-10">
+                    <p className="text-2xl tracking-normal text-left leading-15">I'm currently working on this portfolio, expanding into multiple areas of Next.js and exploring how to integrate GSAP and Framer together. I'm also planning on working on a marble game in Java. Although I haven't started, I'm designing how the gameplay will work.</p>
+                </div>
+            </div>
+
+            { /* skills */ }
+            <div className="w-fluid-lg mx-auto flex flex-col mt-20">
+                <h1 className="text-md text-zinc-400 tracking-wide border-b-2 border-zinc-300 pb-3">SKILLS</h1>
+                <SkillsSection sectionTitle="Operating Systems">
+                    <OS operatingSystem="Windows" />
+                    <OS operatingSystem="MacOS" specialize />
+                </SkillsSection>
+                <SkillsSection sectionTitle="Languages">
+                    <Language language="Java" specialize />
+                    <Language language="Python" specialize/>
+                    <Language language="HTML" />
+                    <Language language="CSS" />
+                    <Language language="Tailwind" />
+                    <Language language="Javascript" />
+                    <Language language="Typescript" />
+                </SkillsSection>
+                <SkillsSection sectionTitle="Libraries & Frameworks">
+                    <Framework framework="Next.js" specialize />
+                    <Framework framework="SpigotMC" specialize />
+                    <Framework framework="Electron.js" />
+                    <Framework framework="Swing" />
+                    <Library library="React" specialize />
+                </SkillsSection>
+            </div>
+
+            { /* education */ }
+            <div className="w-fluid-lg mx-auto flex flex-col mt-20">
+                <h1 className="text-md text-zinc-400 tracking-wide border-b-2 border-zinc-300 pb-3">EDUCATION</h1>
+                <div className="flex flex-col mt-10">
+                    <div className="flex flex-col">
+                        <p className="text-zinc-400">2024 - Present</p>
+                        <p className="text-2xl tracking-normal leading-15 text-left"><span className="font-bold text-red-400">High School</span> - TJHSST (Class of 2028)</p>
+                        <ul className="ml-19 text-lg list-disc">
+                            <li>Foundations of Computer Science (Honors)</li>
+                            <li>Research Statistics 1 (Honors)</li>
+                        </ul>
+                    </div>
+                </div>
+                <div className="flex flex-col mt-10">
+                    <div className="flex flex-col">
+                        <p className="text-zinc-400">2018 - Present</p>
+                        <p className="text-2xl tracking-normal leading-15 text-left"><span className="font-bold text-red-400">Out of School</span> - Self Study</p>
+                        <ul className="ml-19 text-lg list-disc">
+                            <li>Python</li>
+                            <li>Java/Type Script</li>
+                            <li>React</li>
+                            <li>Electron.js</li>
+                            <li>Java</li>
+                            <li>More!</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            { /* contact */ }
+            <div className="flex flex-col w-fluid-lg mx-auto mt-30">
+                <h1 className="text-7xl mx-auto">Let's Talk!</h1>
+                <p className="mx-auto mt-5">Shoot me an email! Note I will respond with my personal email.</p>
+                <Link href="mailto:me@robertzhao.dev" className="flex flex-row mx-auto border-2 border-zinc-300 rounded-3xl mt-10 p-5 justify-center items-center">
+                    <FiMail className="w-8 h-8 text-zinc-400 mt-1" />
+                    <span className="text-xl ml-3">me@robertzhao.dev</span>
+                </Link>
+            </div>
+
+            { /* footer */ }
+            <Footer />
         </div>
     )
 }
