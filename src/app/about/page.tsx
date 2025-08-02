@@ -8,7 +8,6 @@ import { DrawSVGPlugin, ScrollTrigger } from "gsap/all";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import SkillsSection from "@/components/skills/SkillsSection";
-import { FaWindows } from "react-icons/fa";
 import OS from "@/components/skills/OS";
 import Language from "@/components/skills/Language";
 import Framework from "@/components/skills/Framework";
@@ -51,6 +50,9 @@ export default function About() {
     useGSAP(() => {
         // added this to shut gsap up about missing targets
         if(!loaded) return;
+
+        // refresh scroll triggers - this allows the universal nav button to work properly
+        ScrollTrigger.refresh();
 
         // draw the svg text
         tl.current.fromTo(".about-text-writeon path", {
@@ -128,6 +130,7 @@ export default function About() {
         // cleanup
         return () => {
             tl.current.kill();
+            ScrollTrigger.getAll().forEach(trigger => trigger.kill());
         }
     }, [loaded]);
 
@@ -167,7 +170,7 @@ export default function About() {
             <div className="header flex flex-col mt-10">
                 <span className="bg-green-400 rounded-full w-fit mx-auto px-3 py-1 text-xs">• Available</span>
                 <div className="mx-auto flex flex-row">
-                    <h1 className="md:text-[3.35rem] text-[1.65rem] mt-1"><span className="text-red-400">Hello</span>, I'm </h1>
+                    <h1 className="md:text-[3.35rem] text-[1.65rem] mt-1"><span className="text-red-400">Hello</span>, I&apos;m </h1>
                     <div className="about-text relative flex flex-col bg-white md:ml-5 ml-4 md:w-fit w-[150px]">
                         { /* svg for the text writing animation */}
                         <svg className="about-text-writeon absolute md:h-[45.8px] h-[23.5px] md:-left-[0.06rem] -left-[0.45rem] md:top-[1.55rem] top-[0.925rem] z-10 fill-none stroke-black md:stroke-[6px] stroke-[10px]" viewBox="0 0 365 58" xmlns="http://www.w3.org/2000/svg">
@@ -225,9 +228,9 @@ export default function About() {
                 <h1 className="text-md text-zinc-400 tracking-wide border-b-2 border-zinc-300 pb-3">ABOUT ME</h1>
                 <div className="flex md:flex-row flex-col mt-10">
                     <div className="flex flex-col md:w-[70%] md:mr-10 w-full mr-0 text-[1.4rem] md:indent-20 indent-10">
-                        <p className="tracking-normal leading-15">Hello, I'm Robert Zhao. I'm currently a student at <Link className="underline text-red-400" href="https://www.tjhsst.edu/">TJHSST</Link> (Class of 2028) and I love technology. I'm currently mostly a full-stack developer, but planning on exploring more into the backend, artificial intelligence, and machine learning.</p>
+                        <p className="tracking-normal leading-15">Hello, I&apos;m Robert Zhao. I&apos;m currently a student at <Link className="underline text-red-400" href="https://www.tjhsst.edu/">TJHSST</Link> (Class of 2028) and I love technology. I&apos;m currently mostly a full-stack developer, but planning on exploring more into the backend, artificial intelligence, and machine learning.</p>
                         <p className="tracking-normal leading-15 mt-5">I started programming in 2018, and have been developing software ever since. I love the feeling of creating something from nothing, and seeing it come to life. I also love the challenge of solving complex problems, and finding the most efficient solution for them.</p>
-                        <p className="tracking-normal leading-15 mt-5">In my free time, I usually enjoy playing video games, video editing, or photography. It's a great way to release stress from my day and express my inner creativity.</p>
+                        <p className="tracking-normal leading-15 mt-5">In my free time, I usually enjoy playing video games, video editing, or photography. It&apos;s a great way to release stress from my day and express my inner creativity.</p>
                     </div>
                     <div className="flex flex-col md:w-1/4 w-full md:mx-0 md:my-auto mx-auto mt-10 relative overflow-hidden h-100">
                         <div className="absolute inset-0 bg-white z-0"></div>
@@ -246,7 +249,7 @@ export default function About() {
             <div className="w-fluid-lg mx-auto flex flex-col mt-20">
                 <h1 className="text-md text-zinc-400 tracking-wide border-b-2 border-zinc-300 pb-3">CURRENT WORK</h1>
                 <div className="flex flex-col mt-10 md:indent-20 indent-10">
-                    <p className="text-2xl tracking-normal text-left leading-15">I'm currently working on this portfolio, expanding into multiple areas of Next.js and exploring how to integrate GSAP and Framer together. I'm also planning on working on a marble game in Java. Although I haven't started, I'm designing how the gameplay will work.</p>
+                    <p className="text-2xl tracking-normal text-left leading-15">I&apos;m currently working on this portfolio, expanding into multiple areas of Next.js and exploring how to integrate GSAP and Framer together. I&apos;m also planning on working on a marble game in Java. Although I haven&apos;t started, I&apos;m designing how the gameplay will work.</p>
                 </div>
             </div>
 
@@ -306,7 +309,7 @@ export default function About() {
 
             { /* contact */ }
             <div className="flex flex-col w-fluid-lg mx-auto mt-30">
-                <h1 className="text-7xl mx-auto">Let's Talk!</h1>
+                <h1 className="text-7xl mx-auto">Let&apos;s Talk!</h1>
                 <p className="mx-auto mt-5">Shoot me an email! Note I will respond with my personal email.</p>
                 <Link href="mailto:me@robertzhao.dev" className="flex flex-row mx-auto border-2 border-zinc-300 rounded-3xl mt-10 p-5 justify-center items-center">
                     <FiMail className="w-8 h-8 text-zinc-400 mt-1" />

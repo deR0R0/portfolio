@@ -1,6 +1,5 @@
 'use client';
 
-import { BiQuestionMark } from "react-icons/bi";
 import { BsFillQuestionCircleFill } from "react-icons/bs";
 import { FaStar } from "react-icons/fa";
 import { SiElectron, SiNextdotjs, SiSpigotmc } from "react-icons/si";

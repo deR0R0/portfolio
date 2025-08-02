@@ -2,7 +2,7 @@
 
 import { BiQuestionMark } from "react-icons/bi";
 import { FaStar } from "react-icons/fa";
-import { SiNextdotjs, SiReact } from "react-icons/si";
+import { SiReact } from "react-icons/si";
 
 export default function Library({ library, specialize }: { library: string, specialize?: boolean }) {
     const getIcon = () => {
