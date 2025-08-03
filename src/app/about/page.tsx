@@ -124,6 +124,27 @@ export default function About() {
             stagger: 0.25,
         }, "<+=1");
 
+        tl.current.fromTo(".about-section", {
+            y: 100,
+            opacity: 0,
+        }, {
+            y: 0,
+            opacity: 1,
+            duration: 0.75,
+            ease: "power3.inOut",
+        }, "<+=1");
+
+        tl.current.fromTo(".about-section p", {
+            y: 50,
+            opacity: 0,
+        }, {
+            y: 0,
+            opacity: 1,
+            duration: 0.75,
+            ease: "power3.inOut",
+            stagger: 0.25,
+        }, "<+=0.5");
+
 
 
         // cleanup
@@ -223,7 +244,7 @@ export default function About() {
             </div>
 
             { /* about */ }
-            <div className="w-fluid-lg mx-auto flex flex-col mt-20">
+            <div className="w-fluid-lg mx-auto flex flex-col mt-20 about-section">
                 <h1 className="text-md text-zinc-400 tracking-wide border-b-2 border-zinc-300 pb-3">ABOUT ME</h1>
                 <div className="flex md:flex-row flex-col mt-10">
                     <div className="flex flex-col md:w-[70%] md:mr-10 w-full mr-0 md:text-[1.4rem] text-[1rem] md:indent-20 indent-10">
@@ -249,6 +270,7 @@ export default function About() {
                 <h1 className="text-md text-zinc-400 tracking-wide border-b-2 border-zinc-300 pb-3">CURRENT WORK</h1>
                 <div className="flex flex-col mt-10 md:indent-20 indent-10">
                     <p className="md:text-2xl text-[1rem] tracking-normal text-left leading-15">I&apos;m currently working on this portfolio, expanding into multiple areas of Next.js and exploring how to integrate GSAP and Framer together. I&apos;m also planning on working on a marble game in Java. Although I haven&apos;t started, I&apos;m designing how the gameplay will work.</p>
+                    <p className="md:text-2xl text-[1rem] tracking-normal text-left leading-15 font-bold mt-10">I&apos;m currently searching for internship, tutoring, and TA opportunities to expand my knowledge, leadership skills, and experience in the tech industry. My skills and education below, contact: me@robertzhao.dev</p>
                 </div>
             </div>
 
