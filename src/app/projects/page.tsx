@@ -31,6 +31,12 @@ export default function Projects() {
         }
     }, []);
 
+    useEffect(() => {
+        if(!loaded) return;
+
+        
+    }, [loaded]);
+
     // return loading page
     if (!loaded) {
         return (

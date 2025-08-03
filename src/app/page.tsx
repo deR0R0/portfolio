@@ -6,9 +6,9 @@ import { gsap, DrawSVGPlugin, ScrollTrigger, SplitText } from "gsap/all";
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { pjs } from "./fonts";
-import ScrollingHobbyList from "@/components/ScrollingHobbyList";
-import TechStackItem from "@/components/TechStackItem";
-import ProjectItem from "@/components/ProjectItem";
+import ScrollingHobbyList from "@/components/landing/ScrollingHobbyList";
+import TechStackItem from "@/components/landing/TechStackItem";
+import ProjectItem from "@/components/landing/ProjectItem";
 import Image from "next/image";
 import Footer from "@/components/Footer";
 
