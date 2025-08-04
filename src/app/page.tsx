@@ -121,7 +121,6 @@ export default function Home() {
             start: "clamp(top bottom-=200px)",
             end: "clamp(bottom center)",
             scrub: false,
-            markers: true
           }
         }
       );

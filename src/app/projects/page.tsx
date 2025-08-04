@@ -34,7 +34,12 @@ export default function Projects() {
     useEffect(() => {
         if(!loaded) return;
 
-        
+        const fetchProjects = async () => {
+            const projects = await fetch("/api/github");
+            console.log(await projects.text());
+        };
+
+        fetchProjects();
     }, [loaded]);
 
     // return loading page
