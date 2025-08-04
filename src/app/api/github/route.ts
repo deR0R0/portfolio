@@ -1,19 +1,31 @@
 import { NextResponse } from "next/server";
 
-export async function GET() {
-    let lastSinceUpdated: number = new Date(Date.now() - 10 * 60 * 1000).getMilliseconds(); // 10 minutes ago
-    const repoData: any[] = [];
+let lastSinceUpdated: number = Date.now() - 10 * 60 * 1000; // 10 minutes ago
+let cachedRepoData: any[] = [];
 
+const tags: Record<string, string[]> = {
+    "portfolio": ["website", "typescript", "react", "nextjs", "tailwindcss", "gsap", "framer-motion", "open-source"],
+    "SixStones": ["server-mod", "minecraft", "spigot", "bukkit", "plugin", "java", "maven", "yaml", "open-source"],
+    "sssnac-time": ["game", "java", "swing", "graphics", "school", "open-source"],
+    "isotope": ["bot", "discord", "python", "html", "oauth2", "discord.py", "sqlite", "json", "website", "open-source"],
+    "SSTimer": ["application", "electron.js", "html", "css", "javascript", "json", "open-source"],
+    "DiscordRPC": ["application", "python", "pypresence", "json", "open-source"],
+    "login-page": ["website", "html", "css", "javascript", "python", "fullstack", "open-source"],
+    "SimpleSmite": ["server-mod", "minecraft", "spigot", "bukkit", "plugin", "java", "maven", "open-source"],
+    "SimpleFly": ["server-mod", "minecraft", "spigot", "bukkit", "plugin", "java", "maven", "yaml", "open-source"],
+}
+
+export async function GET() {
     try {
         // we are fetching all repositories, then we're going to
-        // go into the readme and try to find the header "TAGS"
         // extract the tags, determine if the repository is a project
         // to include the repository in the list of projects.
         // We also need to implement caching to avoid hitting the rate limit. We're updating every 10 minutes.
 
-        // check if the last update was less than 10 minutes ago
-        if (lastSinceUpdated > Date.now()) {
-            return NextResponse.json({ repositories: repoData, total: repoData.length, lastUpdated: lastSinceUpdated });
+        // check if the last update was less than 10 minutes ago,
+        // if it is, return the cached data
+        if (Date.now() - lastSinceUpdated < 10 * 60 * 1000) {
+            return NextResponse.json({ repositories: cachedRepoData, total: cachedRepoData.length, lastUpdated: lastSinceUpdated });
         }
 
         // isn't? update the information
@@ -24,61 +36,38 @@ export async function GET() {
         }
 
         const repositories = await response.json();
+        const repoData: any[] = [];
 
         // for each repository, we will check if it has a README file
-        let times = 0;
-        repositories.forEach(async (repository: { name: string, html_url: string, stargazers_count: number, updated_at: string }) => {
-            times++;
-
-            if(times > 3) {
-                return; // limit the number of requests to avoid hitting the rate limit
+        for(const repository of repositories) {
+            if(repository.fork) {
+                console.debug(`Skipping forked repository ${repository.name}`);
+                continue;
             }
 
+            let tagsList = tags[repository.name];
 
-            const repoReadme = await fetch(`https://api.github.com/repos/deR0R0/${repository.name}/readme`, {
-                headers: {
-                    "Accept": "application/vnd.github.v3.raw"
-                }
+            // didn't manually set a tag? return no tags
+            if(tags[repository.name] === undefined) {
+                tagsList = ["unknown"];
+            }
+
+            repoData.push({
+                name: repository.name,
+                description: repository.description || "No description provided",
+                url: repository.html_url,
+                tags: tagsList,
+                stars: repository.stargazers_count,
+                updatedAt: repository.updated_at,
             });
+        }
 
-            if(repoReadme.status === 404) {
-                console.warn("README not found for", repository.name);
-                return;
-            }
-
-            if(!repoReadme.ok) {
-                console.log(repoReadme.status, repoReadme.statusText);
-                console.error(`Failed to fetch README for ${repository.name}`);
-                return;
-            }
-
-            const text = await repoReadme.text();
-
-            if(!text.includes("# TAGS")) {
-                console.warn(`No tags found in README for ${repository.name}`);
-                return;
-            }
-
-            // if there are tags, read the line after "# TAGS" and split by commas
-            const tags = [];
-            const lines = text.split("\n");
-            for(let i = 0; i < lines.length; i++) {
-                if(lines[i].includes("# TAGS")) {
-                    if(i + 1 < lines.length) {
-                        tags.push(...lines[i + 1].split(",").map(tag => tag.trim()));
-                    }
-                    break;
-                }
-            }
-
-            repoData.push({ name: repository.name, url: repository.html_url, stars: repository.stargazers_count, updatedAt: repository.updated_at, readme: text });
-        });
-
-        lastSinceUpdated = new Date(Date.now()).getMilliseconds(); // update the last updated time
+        cachedRepoData = repoData; // cache the data
+        lastSinceUpdated = Date.now(); // update the last updated time
 
         // return all repositories information
         return NextResponse.json({
-            repositories: await Promise.all(repoData),
+            repositories: repoData,
             total: repositories.length,
             lastUpdated: lastSinceUpdated
         });
