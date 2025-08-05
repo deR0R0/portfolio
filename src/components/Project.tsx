@@ -41,7 +41,7 @@ export default function Project( { name, description, url, tags, impressions, im
     }
 
     return (
-        <div className={`project ${tags.join(" ")} w-full border-t-2 border-zinc-300 py-10 flex md:flex-row flex-col hover:scale-[102%] transition-transform duration-200`}>
+        <div className={`project ${tags.join(" ")} w-full border-t-2 border-zinc-300 py-10 flex md:flex-row flex-col`}>
             <div className="flex flex-col">
                 <div className="tags space-x-3 space-y-3 flex flex-row flex-wrap">
                     {tags.map(tag => (

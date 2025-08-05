@@ -6,6 +6,7 @@ import HomePageLoader from "@/components/MainLoader";
 import Project from "@/components/Project";
 import { LuLoaderCircle } from "react-icons/lu";
 import Footer from "@/components/Footer";
+import { useGSAP } from "@gsap/react";
 
 interface Repository {
     name: string;
@@ -18,6 +19,7 @@ interface Repository {
 
 export default function Projects() {
     const [loaded, setLoaded] = useState(false);
+    const [loadedProjects, setLoadedProjects] = useState(false);
     const [repositories, setRepositories] = useState<Repository[]>([]);
     const [lastUpdated, setLastUpdated] = useState<string>("?");
     const tl = useRef(gsap.timeline({ paused: true }));
@@ -58,6 +60,7 @@ export default function Projects() {
                 const data = await repositories.json();
                 setRepositories(data.repositories || []);
                 setLastUpdated(data.lastUpdated || "?");
+                setLoadedProjects(true);
             } catch (error) {
                 console.error("Error fetching repositories:", error);
             }
@@ -66,6 +69,20 @@ export default function Projects() {
 
         fetchRepositories();
     }, [loaded]);
+
+    useGSAP(() => {
+        if(!loadedProjects) return;
+
+        tl.current.fromTo(".project", {
+            opacity: 0,
+            x: -50
+        }, {
+            opacity: 1,
+            x: 0,
+            duration: 0.5,
+            stagger: 0.2
+        }, "<+=0.5");
+    }, [loadedProjects]);
 
     const getRelativeTime = () => {
         if(lastUpdated === "?") return "Unknown";

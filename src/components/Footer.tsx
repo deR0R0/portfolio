@@ -8,9 +8,9 @@ import { BiMailSend } from "react-icons/bi";
 
 gsap.registerPlugin(ScrollTrigger);
 
-export default function Footer() {
+export default function Footer( { className = "" } : { className?: string } ) {
     return (
-        <footer className="bg-zinc-800 text-white w-screen md:h-[30rem] h-[50rem] flex md:flex-row flex-col mt-52">
+        <footer className={`bg-zinc-800 text-white w-screen md:h-[30rem] h-[50rem] flex md:flex-row flex-col mt-52 ${className}`}>
             <div className="flex flex-col mx-auto mt-20 text-sm space-y-3">
                 <span className="text-lg text-zinc-400 mb-3">Credits</span>
                 <span>Created By Robert Zhao</span>
