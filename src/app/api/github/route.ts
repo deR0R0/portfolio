@@ -24,7 +24,7 @@ const tags: Record<string, string[]> = {
     "SimpleFly": ["server-mod", "minecraft", "spigot", "bukkit", "plugin", "java", "maven", "yaml", "open-source"],
 }
 
-export async function GET(request: Request, context: { env: { GITHUB_KEY: string } }) {
+export async function GET() {
     try {
         // we are fetching all repositories, then we're going to
         // extract the tags, determine if the repository is a project
@@ -40,7 +40,7 @@ export async function GET(request: Request, context: { env: { GITHUB_KEY: string
         // isn't? update the information
         const response = await fetch("https://api.github.com/users/deR0R0/repos?sort=updated&per_page=100", {
             headers: {
-                Authorization: `Bearer ${context.env.GITHUB_KEY}`
+                Authorization: `Bearer ${process.env.GITHUB_KEY}`
             }
         });
 
