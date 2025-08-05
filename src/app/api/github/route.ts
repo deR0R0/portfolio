@@ -1,5 +1,15 @@
 import { NextResponse } from "next/server";
 
+export const runtime = 'edge';
+
+// github key
+declare global {
+    var GITHUB_KEY: string | undefined;
+}
+const GITHUB_KEY = globalThis.GITHUB_KEY ?? (process.env.GITHUB_KEY || "");
+globalThis.GITHUB_KEY = GITHUB_KEY;
+
+
 interface Repository {
     name: string;
     description: string;
@@ -40,7 +50,7 @@ export async function GET() {
         // isn't? update the information
         const response = await fetch("https://api.github.com/users/deR0R0/repos?sort=updated&per_page=100", {
             headers: {
-                Authorization: `Bearer ${process.env.GITHUB_KEY}`
+                Authorization: `Bearer ${GITHUB_KEY}`
             }
         });
 
