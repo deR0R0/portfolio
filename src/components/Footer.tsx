@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { gsap, ScrollTrigger } from "gsap/all";
-import { useEffect } from "react";
 import { FaGithub } from "react-icons/fa";
 import { SiModrinth, SiThunderstore } from "react-icons/si";
 import { BiMailSend } from "react-icons/bi";

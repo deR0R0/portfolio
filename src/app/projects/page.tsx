@@ -4,14 +4,21 @@ import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import HomePageLoader from "@/components/MainLoader";
 import Project from "@/components/Project";
-import { motion } from "motion/react";
 import { LuLoaderCircle } from "react-icons/lu";
 import Footer from "@/components/Footer";
 
+interface Repository {
+    name: string;
+    description: string;
+    url: string;
+    tags: string[];
+    stars: number;
+    updatedAt: string;
+}
 
 export default function Projects() {
     const [loaded, setLoaded] = useState(false);
-    const [repositories, setRepositories] = useState<any[]>([]);
+    const [repositories, setRepositories] = useState<Repository[]>([]);
     const [lastUpdated, setLastUpdated] = useState<string>("?");
     const tl = useRef(gsap.timeline({ paused: true }));
 

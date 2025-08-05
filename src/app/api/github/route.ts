@@ -1,7 +1,16 @@
 import { NextResponse } from "next/server";
 
+interface Repository {
+    name: string;
+    description: string;
+    url: string;
+    tags: string[];
+    stars: number;
+    updatedAt: string;
+}
+
 let lastSinceUpdated: number = Date.now() - 10 * 60 * 1000; // 10 minutes ago
-let cachedRepoData: any[] = [];
+let cachedRepoData: Repository[] = [];
 
 const tags: Record<string, string[]> = {
     "portfolio": ["website", "typescript", "react", "nextjs", "tailwindcss", "gsap", "framer-motion", "open-source"],
@@ -36,7 +45,7 @@ export async function GET() {
         }
 
         const repositories = await response.json();
-        const repoData: any[] = [];
+        const repoData: Repository[] = [];
 
         // for each repository, we will check if it has a README file
         for(const repository of repositories) {
